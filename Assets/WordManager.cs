@@ -21,12 +21,18 @@ public class WordManager : MonoBehaviour
 
     private void Start() 
     {
-        GenerateNewWord();
+        StartCoroutine(WaitForSeconds(0.5f));
     }
 
     private void GenerateNewWord() 
     {
         word = wordRandomizer.NewWord();
+    }
+
+    IEnumerator WaitForSeconds(float time)
+    {
+        yield return new WaitForSeconds(time);
+        GenerateNewWord();
     }
 
     public void TypeLetter(char letter)
@@ -98,7 +104,7 @@ public class WordManager : MonoBehaviour
                         if(child != null)
                         {
                             LetterControl script = child.GetComponent<LetterControl>();
-                            script.isCorrect = true;
+                            script.Correct();
                             script.SetColor(correct);
                         }
                         Debug.Log("Sim");

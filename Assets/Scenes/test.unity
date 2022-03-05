@@ -269,12 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9a983059b7ceb4f8d13a5d1d78cfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  words:
-  - cobra
-  - carro
-  - corra
-  - monta
-  - tonta
+  words: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

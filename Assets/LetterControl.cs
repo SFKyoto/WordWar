@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LetterControl : MonoBehaviour
 {
+    public ParticleSystem particleSystem;
     public Text text;
     private Color status;
     public bool isCorrect = false;
@@ -12,6 +13,12 @@ public class LetterControl : MonoBehaviour
     public void SetLetter(char letter)
     {
         text.text = letter.ToString().ToUpper();
+    }
+
+    public void Correct()
+    {
+        isCorrect = true;
+        particleSystem.Play();
     }
 
     public char GetLetter()
