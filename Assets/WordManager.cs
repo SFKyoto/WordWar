@@ -19,6 +19,16 @@ public class WordManager : MonoBehaviour
 
     private int scorePoints = 0;
 
+    private void Start() 
+    {
+        GenerateNewWord();
+    }
+
+    private void GenerateNewWord() 
+    {
+        word = wordRandomizer.NewWord();
+    }
+
     public void TypeLetter(char letter)
     {
         foreach(Transform child in transform)
@@ -84,6 +94,13 @@ public class WordManager : MonoBehaviour
                     {
                         exits[index1] = correct; //send green
                         found = true;
+                        Transform child = transform.Find("Letter"+index1.ToString());
+                        if(child != null)
+                        {
+                            LetterControl script = child.GetComponent<LetterControl>();
+                            script.isCorrect = true;
+                            script.SetColor(correct);
+                        }
                         Debug.Log("Sim");
                         break;
                     }
@@ -106,17 +123,9 @@ public class WordManager : MonoBehaviour
 
         answerManager.CreateAnswer(letters,exits);
         
-        int index = 0;
+        clear(0);
+
         bool allCorrect = true;
-        foreach(Transform child in transform)
-        {
-            LetterControl script = child.GetComponent<LetterControl>();
-            if (script)
-            {
-                script.SetLetter(' ');
-            }
-        index++;
-        }
 
         Debug.Log(letters);
 
@@ -130,7 +139,8 @@ public class WordManager : MonoBehaviour
         if(allCorrect)
         {
             IncreaseScore();
-            word = wordRandomizer.NewWord();
+            GenerateNewWord();
+            clear(1);
         }
     }
 
@@ -141,7 +151,48 @@ public class WordManager : MonoBehaviour
         {
             letterIndex = 0;
             ReviseLetters();
-            //clear letters
+            
+        }
+        Transform child = transform.Find("Letter"+letterIndex.ToString());
+        if(child != null)
+        {
+            LetterControl script = child.GetComponent<LetterControl>();
+            if(script.getColor() == correct)
+            {
+                script.SetLetter(word.ToCharArray()[letterIndex]);
+                IncreaseIndex();
+            }
+        }
+    }
+
+    private void clear(int code)
+    {
+        if(code == 0)
+        {
+            foreach(Transform child in transform)
+            {
+                LetterControl script = child.GetComponent<LetterControl>();
+                if (script)
+                {
+                    if(!script.isCorrect)
+                    {
+                        script.SetLetter(' ');
+                    }
+                }
+            }
+        }
+        else if(code == 1)
+        {
+            foreach(Transform child in transform)
+            {
+                LetterControl script = child.GetComponent<LetterControl>();
+                if (script)
+                {
+                    script.SetLetter(' ');
+                    script.isCorrect = false;
+                    script.SetColor(Color.white);
+                }
+            }
         }
     }
 
