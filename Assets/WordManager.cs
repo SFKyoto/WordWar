@@ -9,6 +9,8 @@ public class WordManager : MonoBehaviour
     public IndicatorManager indicatorManager;
     public WordRandomizer wordRandomizer;
     public Text score;
+    public Text allTriesText;
+    public Text allCorrects;
 
     public string word = "cobra";
     public int letterIndex = 0;
@@ -18,6 +20,9 @@ public class WordManager : MonoBehaviour
     public Color incorrect;
 
     private int scorePoints = 0;
+    private int allTries = 0;
+    private int tries = 0;
+    private int hits = 0;
 
     private void Start() 
     {
@@ -148,6 +153,13 @@ public class WordManager : MonoBehaviour
             GenerateNewWord();
             clear(1);
         }
+        else
+        {
+            allTries++;
+            tries++;
+        }
+
+        UpdateText();
     }
 
     private void IncreaseIndex()
@@ -209,7 +221,15 @@ public class WordManager : MonoBehaviour
 
     private void IncreaseScore()
     {
-        scorePoints += 100;
+        hits++;
+        scorePoints += 1000/tries;
+        tries = 0;
+    }
+
+    private void UpdateText()
+    {
         score.text = "Pontos: " + scorePoints.ToString();
+        allTriesText.text = "Tentativas: " + allTries.ToString();
+        allCorrects.text = "Acertos: " + hits.ToString();
     }
 }
