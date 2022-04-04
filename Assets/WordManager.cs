@@ -23,6 +23,8 @@ public class WordManager : MonoBehaviour
     private int allTries = 0;
     private int tries = 0;
     private int hits = 0;
+    
+    private Color[] exits;
 
     private void Start() 
     {
@@ -32,6 +34,7 @@ public class WordManager : MonoBehaviour
     private void GenerateNewWord() 
     {
         word = wordRandomizer.NewWord();
+        exits = new Color[word.Length];
     }
 
     IEnumerator WaitForSeconds(float time)
@@ -82,7 +85,6 @@ public class WordManager : MonoBehaviour
     private void ReviseLetters()
     {
         string letters = "";
-        Color[] exits = new Color[word.Length];
         foreach(Transform child in transform)
         {
             LetterControl script = child.GetComponent<LetterControl>();
@@ -101,25 +103,32 @@ public class WordManager : MonoBehaviour
             {
                 if(letter1 == letter2)
                 {
-                    if(index1 == index2)
+                    found = true;
+                    if(exits[index2] != correct)
                     {
-                        exits[index1] = correct; //send green
-                        found = true;
-                        Transform child = transform.Find("Letter"+index1.ToString());
-                        if(child != null)
+                        if(index1 == index2)
                         {
-                            LetterControl script = child.GetComponent<LetterControl>();
-                            script.Correct();
-                            script.SetColor(correct);
+                            exits[index1] = correct; //send green
+                            Transform child = transform.Find("Letter"+index1.ToString());
+                            if(child != null)
+                            {
+                                LetterControl script = child.GetComponent<LetterControl>();
+                                script.Correct();
+                                script.SetColor(correct);
+                            }
+                            Debug.Log("Sim");
+                            break;
                         }
-                        Debug.Log("Sim");
-                        break;
+                        else
+                        {
+                            exits[index1] = miss; //send yellow
+                            Debug.Log("Quase");
+                        }
                     }
-                    else
+                    else if(exits[index1] != correct) 
                     {
-                        exits[index1] = miss; //send yellow
-                        found = true;
-                        Debug.Log("Quase");
+                        exits[index1] = incorrect;
+                        break;
                     }
                 }
                 index2++;
@@ -145,10 +154,13 @@ public class WordManager : MonoBehaviour
             if(exit != correct) 
             {
                 allCorrect = false;
+                Debug.Log(allCorrect);
             }
+            Debug.Log(exit);
         }
         if(allCorrect)
         {
+            Debug.Log("Socorro");
             IncreaseScore();
             GenerateNewWord();
             clear(1);
@@ -222,7 +234,8 @@ public class WordManager : MonoBehaviour
     private void IncreaseScore()
     {
         hits++;
-        scorePoints += 1000/tries;
+        if(tries != 0) scorePoints += 1000/tries;
+        else scorePoints += 1000;
         tries = 0;
     }
 

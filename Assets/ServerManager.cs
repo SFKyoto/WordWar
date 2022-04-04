@@ -37,4 +37,9 @@ public class ServerManager : MonoBehaviour
     {
         SceneManager.LoadScene (sceneName:"game");
     }
+
+    public void SingleplayerMode()
+    {
+        SceneManager.LoadScene (sceneName:"single");
+    }
 }

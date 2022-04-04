@@ -17,8 +17,8 @@ public class LetterControl : MonoBehaviour
 
     public void Correct()
     {
+        if(!isCorrect) particleSystem.Play();
         isCorrect = true;
-        particleSystem.Play();
     }
 
     public char GetLetter()
