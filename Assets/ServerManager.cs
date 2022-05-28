@@ -40,6 +40,6 @@ public class ServerManager : MonoBehaviour
 
     public void SingleplayerMode()
     {
-        SceneManager.LoadScene (sceneName:"single");
+        SceneManager.LoadScene (sceneName:"gamemode_1");
     }
 }

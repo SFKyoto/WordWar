@@ -15,6 +15,7 @@ public class WordManager : MonoBehaviour
     public string word = "cobra";
     public int letterIndex = 0;
 
+    public Color defaultColor;
     public Color correct;
     public Color miss;
     public Color incorrect;
@@ -109,6 +110,7 @@ public class WordManager : MonoBehaviour
                         if(index1 == index2)
                         {
                             exits[index1] = correct; //send green
+                            /*
                             Transform child = transform.Find("Letter"+index1.ToString());
                             if(child != null)
                             {
@@ -116,6 +118,7 @@ public class WordManager : MonoBehaviour
                                 script.Correct();
                                 script.SetColor(correct);
                             }
+                            */
                             Debug.Log("Sim");
                             break;
                         }
@@ -125,9 +128,9 @@ public class WordManager : MonoBehaviour
                             Debug.Log("Quase");
                         }
                     }
-                    else if(exits[index1] != correct) 
+                    else if(exits[index1] == correct) 
                     {
-                        exits[index1] = incorrect;
+                        //exits[index1] = incorrect;
                         break;
                     }
                 }
@@ -220,7 +223,7 @@ public class WordManager : MonoBehaviour
                 {
                     script.SetLetter(' ');
                     script.isCorrect = false;
-                    script.SetColor(Color.white);
+                    script.SetColor(defaultColor);
                 }
             }
         }
