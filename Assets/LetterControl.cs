@@ -33,8 +33,13 @@ public class LetterControl : MonoBehaviour
         status = _status;
     }
 
-    public Color getColor()
+    public Color GetColor()
     {
         return status;
+    }
+
+    public void SetFontColor(Color colorFont)
+    {
+        text.color =  colorFont;
     }
 }

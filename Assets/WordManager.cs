@@ -8,6 +8,7 @@ public class WordManager : MonoBehaviour
     public AnswerManager answerManager;
     public IndicatorManager indicatorManager;
     public WordRandomizer wordRandomizer;
+    public KeyboardManager keyboardManager;
     public Text score;
     public Text allTriesText;
     public Text allCorrects;
@@ -19,6 +20,9 @@ public class WordManager : MonoBehaviour
     public Color correct;
     public Color miss;
     public Color incorrect;
+    
+    public Color fontOnBlack;
+    public Color fontOnWhite;
 
     private int scorePoints = 0;
     private int allTries = 0;
@@ -29,6 +33,14 @@ public class WordManager : MonoBehaviour
 
     private void Start() 
     {
+        foreach(Transform child in transform)
+        {
+            if(child != null)
+            {
+                LetterControl script = child.GetComponent<LetterControl>();
+                script.SetFontColor(fontOnBlack);
+            }
+        }
         StartCoroutine(WaitForSeconds(0.5f));
     }
 
@@ -144,7 +156,8 @@ public class WordManager : MonoBehaviour
         index1++;
         }
 
-        answerManager.CreateAnswer(letters,exits);
+        answerManager.CreateAnswer(letters,exits,fontOnWhite);
+        keyboardManager.EntryLetters(letters.ToUpper(),exits);
         
         clear(0);
 
@@ -190,7 +203,7 @@ public class WordManager : MonoBehaviour
         if(child != null)
         {
             LetterControl script = child.GetComponent<LetterControl>();
-            if(script.getColor() == correct)
+            if(script.GetColor() == correct)
             {
                 script.SetLetter(word.ToCharArray()[letterIndex]);
                 IncreaseIndex();
@@ -226,6 +239,7 @@ public class WordManager : MonoBehaviour
                     script.SetColor(defaultColor);
                 }
             }
+            keyboardManager.Reset();
         }
     }
 

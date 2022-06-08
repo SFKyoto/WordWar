@@ -10,7 +10,7 @@ public class AnswerManager : MonoBehaviour
 
     public float animationTime = 1.3f;
 
-    public void CreateAnswer(string answer, Color[] colors)
+    public void CreateAnswer(string answer, Color[] colors, Color fontColor)
     {
         for(int i=0;i<answer.Length;i++)
         {
@@ -22,6 +22,7 @@ public class AnswerManager : MonoBehaviour
             {
                 script.SetLetter(answer.ToCharArray()[i]);
                 script.SetColor(colors[i]);
+                script.SetFontColor(fontColor);
             } 
         }
         MoveAnswer();
