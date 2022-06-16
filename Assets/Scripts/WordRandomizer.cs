@@ -6,11 +6,14 @@ using System.IO;
 public class WordRandomizer : MonoBehaviour
 {
     public List<string> words = new List<string>();
+    public List<string> words_broader = new List<string>();
     private List<string> wordsSemAcentos = new List<string>();
 
     private void Start() 
     {
-        ReadTextFile(Application.dataPath + "/StreamingAssets/words.txt");
+        words = ReadTextFile(Application.dataPath + "/StreamingAssets/words_answers.txt");
+        words_broader = ReadTextFile(Application.dataPath + "/StreamingAssets/words_broader.txt");
+        words.ForEach((word) => wordsSemAcentos.Add(word.ToLower()));
     }
 
     public string NewWord()
@@ -20,22 +23,24 @@ public class WordRandomizer : MonoBehaviour
         return word.ToLower();
     }
 
-    void ReadTextFile(string file_path)
+    List<string> ReadTextFile(string file_path)
     {
+        List<string> wordsFromFile = new List<string>();
         StreamReader inp_stm = new StreamReader(file_path);
 
         while(!inp_stm.EndOfStream)
         {
             string inp_ln = inp_stm.ReadLine( );
-            words.Add(inp_ln.ToLower());
-            wordsSemAcentos.Add(TextManipulation.RemoveAccents(inp_ln.ToLower()));
+            wordsFromFile.Add(inp_ln.ToLower());
         }
+        inp_stm.Close( );
 
-        inp_stm.Close( );  
+        return wordsFromFile;
     }
 
     public bool IsInList(string word)
     {
+        Debug.Log(wordsSemAcentos.Contains(word));
         return wordsSemAcentos.Contains(word);
     }
 }

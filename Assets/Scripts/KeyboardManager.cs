@@ -32,7 +32,7 @@ public class KeyboardManager : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public void ResetColors()
     {
         foreach(Transform child in transform)
         {

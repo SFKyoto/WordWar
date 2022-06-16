@@ -304,7 +304,7 @@ public class WordManager : MonoBehaviour
                     script.SetColor(defaultColor);
                 }
             }
-            keyboardManager.Reset();
+            keyboardManager.ResetColors();
         }
     }
 
