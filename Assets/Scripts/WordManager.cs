@@ -13,7 +13,7 @@ public class WordManager : MonoBehaviour
     public Text allTriesText;
     public Text allCorrects;
 
-    public string word = "cobra";
+    public string answerOfTurn = "cobra";
     public List<string> previousWords = new List<string>();
     public int letterIndex = 0;
 
@@ -50,8 +50,8 @@ public class WordManager : MonoBehaviour
     {
         string newWord = wordRandomizer.NewWord();
         previousWords.Add(newWord);
-        word = TextManipulation.RemoveAccents(newWord);
-        exits = new Color[word.Length];
+        answerOfTurn = TextManipulation.RemoveAccents(newWord);
+        exits = new Color[answerOfTurn.Length];
     }
 
     IEnumerator WaitForSeconds(float time)
@@ -130,14 +130,13 @@ public class WordManager : MonoBehaviour
 
     private void ReviseLetters()
     {
-        string letters = GetWord();
-        //StringBuilder wordCopy = new StringBuilder(word);
-        string wordCopy = word;
+        string letters = TextManipulation.RemoveAccents(GetWord());
+        string wordCopy = answerOfTurn;
         int indexWordCopy = 0;
 
         //primeiro checamos quais letras s�o corretas
         for(int i = 0; i < letters.Length; i++){
-            if(letters[i] == word[i]){
+            if(letters[i] == answerOfTurn[i]){
                 exits[i] = correct;
                 //wordCopy[i] = '0';
                 wordCopy = wordCopy.Remove(indexWordCopy, 1);
@@ -153,7 +152,7 @@ public class WordManager : MonoBehaviour
         //vamos checar quais ganham cor 'amarela' ou 'cinza'
         Debug.Log("Palavra que sobrou: " + wordCopy);
         for(int i = 0; i < letters.Length; i++){
-            if(letters[i] != word[i]){
+            if(letters[i] != answerOfTurn[i]){
                 int indexLetraQuase = wordCopy.IndexOf(letters[i]);
                 if(indexLetraQuase != -1){
                     exits[i] = miss;
@@ -174,7 +173,7 @@ public class WordManager : MonoBehaviour
             if(letter1 )
             int index2 = 0;
             bool found = false;
-            foreach(char letter2 in word)
+            foreach(char letter2 in answerOfTurn)
             {
                 if(letter1 == letter2)
                 {
@@ -270,7 +269,7 @@ public class WordManager : MonoBehaviour
             LetterControl script = child.GetComponent<LetterControl>();
             if(script.GetColor() == correct)
             {
-                script.SetLetter(word.ToCharArray()[letterIndex]);
+                script.SetLetter(answerOfTurn.ToCharArray()[letterIndex]);
                 IncreaseIndex();
             }
         }

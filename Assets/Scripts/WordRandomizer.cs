@@ -13,7 +13,7 @@ public class WordRandomizer : MonoBehaviour
     {
         words = ReadTextFile(Application.dataPath + "/StreamingAssets/words_answers.txt");
         words_broader = ReadTextFile(Application.dataPath + "/StreamingAssets/words_broader.txt");
-        words.ForEach((word) => wordsSemAcentos.Add(word.ToLower()));
+        words_broader.ForEach((word) => wordsSemAcentos.Add(TextManipulation.RemoveAccents(word).ToLower()));
     }
 
     public string NewWord()

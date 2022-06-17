@@ -25,11 +25,12 @@ public class AnswerManager : MonoBehaviour
                 script.SetFontColor(fontColor);
             } 
         }
-        MoveAnswer();
+        MoveAnswers();
         answerIndex++;
     }
 
-    public void MoveAnswer()
+    /*Move respostas para o topo da tela.*/
+    public void MoveAnswers()
     {
         foreach(Transform child in transform)
         {

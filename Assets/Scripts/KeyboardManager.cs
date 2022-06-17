@@ -22,7 +22,7 @@ public class KeyboardManager : MonoBehaviour
             {
                 LetterControl script = child.GetComponent<LetterControl>();
                 Color letterColor = script.GetColor();
-                if(letterColor!=correct || (letterColor==miss && entry[index]==correct) || letterColor==incorrect || letterColor==defaultColor)
+                if(letterColor!=correct || (letterColor==miss && entry[index]==correct))
                 {
                     script.SetColor(entry[index]);
                     script.SetFontColor(fontOnWhite);

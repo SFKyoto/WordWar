@@ -3940,6 +3940,7 @@ hélix
 hépia
 hévea
 híala
+hífen
 hímen
 híndi
 hóvea
@@ -9146,6 +9147,7 @@ zínia
 úrico
 úropo
 úsnea
+útero
 úvico
 úvido
 úvula
