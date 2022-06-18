@@ -5,22 +5,22 @@ using System.IO;
 
 public class WordRandomizer : MonoBehaviour
 {
-    public List<string> words = new List<string>();
-    public List<string> words_broader = new List<string>();
-    private List<string> wordsSemAcentos = new List<string>();
+    public List<string> listPossibleAnswers = new List<string>();
+    public List<string> listAllowedGuesses = new List<string>();
+    private List<string> listAllowedGuessesNoAccents = new List<string>();
 
-    private void Start() 
+    private void Start()
     {
-        words = ReadTextFile(Application.dataPath + "/StreamingAssets/words_answers.txt");
-        words_broader = ReadTextFile(Application.dataPath + "/StreamingAssets/words_broader.txt");
-        words_broader.ForEach((word) => wordsSemAcentos.Add(TextManipulation.RemoveAccents(word).ToLower()));
+        listPossibleAnswers = ReadTextFile(Application.dataPath + "/StreamingAssets/words_answers.txt");
+        listAllowedGuesses = ReadTextFile(Application.dataPath + "/StreamingAssets/words_broader.txt");
+        listAllowedGuesses.ForEach((word) => listAllowedGuessesNoAccents.Add(TextManipulation.RemoveAccents(word).ToLower()));
     }
 
-    public string NewWord()
+    public string GetRandomAnswer()
     {
-        int wordIndex = Random.Range(0,words.Count);
-        string word = words[wordIndex];
-        return word.ToLower();
+        int wordIndex = Random.Range(0, listPossibleAnswers.Count);
+        string randomWord = listPossibleAnswers[wordIndex];
+        return randomWord.ToLower();
     }
 
     List<string> ReadTextFile(string file_path)
@@ -40,7 +40,7 @@ public class WordRandomizer : MonoBehaviour
 
     public bool IsInList(string word)
     {
-        Debug.Log(wordsSemAcentos.Contains(word));
-        return wordsSemAcentos.Contains(word);
+        Debug.Log(listAllowedGuessesNoAccents.Contains(word));
+        return listAllowedGuessesNoAccents.Contains(word);
     }
 }

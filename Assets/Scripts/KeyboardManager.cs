@@ -8,7 +8,6 @@ public class KeyboardManager : MonoBehaviour
     public Color correct;
     public Color miss;
     public Color incorrect;
-    
     public Color fontOnBlack;
     public Color fontOnWhite;
 
