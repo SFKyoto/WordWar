@@ -8,7 +8,6 @@ public class KeyboardManager : MonoBehaviour
     public Color correct;
     public Color miss;
     public Color incorrect;
-    
     public Color fontOnBlack;
     public Color fontOnWhite;
 
@@ -22,7 +21,7 @@ public class KeyboardManager : MonoBehaviour
             {
                 LetterControl script = child.GetComponent<LetterControl>();
                 Color letterColor = script.GetColor();
-                if(letterColor!=correct || (letterColor==miss && entry[index]==correct) || letterColor==incorrect || letterColor==defaultColor)
+                if(letterColor!=correct || (letterColor==miss && entry[index]==correct))
                 {
                     script.SetColor(entry[index]);
                     script.SetFontColor(fontOnWhite);
@@ -32,7 +31,7 @@ public class KeyboardManager : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public void ResetColors()
     {
         foreach(Transform child in transform)
         {

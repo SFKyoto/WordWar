@@ -17,19 +17,20 @@ public class AnswerManager : MonoBehaviour
             //GameObject newLetterSquare = Instantiate(letterSquare) as GameObject;
             //newLetterSquare.transform(new Vector3((i*1.25f)-2.5f,2.25f-answerIndex*1.25f,0));
             GameObject newLetterSquare = Instantiate(letterSquare,new Vector3((i*1.25f)-2.5f,0.5f,0),Quaternion.identity, transform) as GameObject;
-            LetterControl script = newLetterSquare.GetComponent<LetterControl>();
-            if(script)
+            LetterControl letterControl = newLetterSquare.GetComponent<LetterControl>();
+            if(letterControl)
             {
-                script.SetLetter(answer.ToCharArray()[i]);
-                script.SetColor(colors[i]);
-                script.SetFontColor(fontColor);
+                letterControl.SetLetter(answer.ToCharArray()[i]);
+                letterControl.SetColor(colors[i]);
+                letterControl.SetFontColor(fontColor);
             } 
         }
-        MoveAnswer();
+        MoveAnswers();
         answerIndex++;
     }
 
-    public void MoveAnswer()
+    /*Move respostas para o topo da tela.*/
+    public void MoveAnswers()
     {
         foreach(Transform child in transform)
         {

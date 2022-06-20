@@ -9,27 +9,28 @@ public class WordManager : MonoBehaviour
     public IndicatorManager indicatorManager;
     public WordRandomizer wordRandomizer;
     public KeyboardManager keyboardManager;
+
+    [Header("Text Objects")]
     public Text score;
     public Text allTriesText;
     public Text allCorrects;
 
-    public string word = "cobra";
+    [Header("Round State")]
+    public string currentGuess = "";
+    public string answerOfTurn = "cobra";
     public List<string> previousWords = new List<string>();
-    public int letterIndex = 0;
-
-    [Header("Cores")]
-    public Color defaultColor;
-    public Color correct;
-    public Color miss;
-    public Color incorrect;
-    
-    public Color fontOnBlack;
-    public Color fontOnWhite;
-
     private int scorePoints = 0;
     private int allTries = 0;
     private int tries = 0;
     private int hits = 0;
+
+    [Header("Colors")]
+    public Color defaultColor;
+    public Color correct;
+    public Color miss;
+    public Color incorrect;
+    public Color fontOnBlack;
+    public Color fontOnWhite;
     
     private Color[] exits;
 
@@ -46,100 +47,82 @@ public class WordManager : MonoBehaviour
         StartCoroutine(WaitForSeconds(0.5f));
     }
 
-    private void GenerateNewWord() 
-    {
-        string newWord = wordRandomizer.NewWord();
-        previousWords.Add(newWord);
-        word = TextManipulation.RemoveAccents(newWord);
-        exits = new Color[word.Length];
-    }
-
     IEnumerator WaitForSeconds(float time)
     {
         yield return new WaitForSeconds(time);
-        GenerateNewWord();
+        GenerateNewAnswer();
+    }
+
+    private void GenerateNewAnswer() 
+    {
+        string newWord = wordRandomizer.GetRandomAnswer();
+        previousWords.Add(newWord);
+        answerOfTurn = TextManipulation.RemoveAccents(newWord);
+        exits = new Color[answerOfTurn.Length];
     }
 
     public void TypeLetter(char letter)
     {
-        if(letterIndex < 5)
+        Debug.Log(currentGuess.Length);
+        if(currentGuess.Length < 5)
         {
-            foreach(Transform child in transform)
-            {
-                string letterIndexString = letterIndex.ToString();
-                //Debug.Log("letterIndexString: "+letterIndexString);
-                //Debug.Log("child.name: "+child.name);
-                if (child.name == "Letter"+letterIndexString)
-                {
-                    LetterControl script = child.GetComponent<LetterControl>();
-                    if (script)
-                    {
-                        script.SetLetter(letter);
-                    } 
-                }
-            }
-            IncreaseIndex();
-            indicatorManager.MoveIndicator(letterIndex*1.25f);
+            currentGuess += letter;
+            Transform letterTransf = transform.GetChild(currentGuess.Length - 1);
+            LetterControl letterControl = letterTransf.GetComponent<LetterControl>();
+            //if(letterControl.GetColor() == correct)
+            letterControl.SetLetter(letter);
+            indicatorManager.MoveIndicator(currentGuess.Length*1.25f);
+            // CheckPreviouslyGuessedLetters();
         }
     }
 
     public void DeleteLetter()
     {
-        if(letterIndex > 0)
+        if(currentGuess.Length > 0)
         {
-            DecreaseIndex();
-            foreach(Transform child in transform)
-            {
-                string letterIndexString = letterIndex.ToString();
-                if (child.name == "Letter"+letterIndexString)
-                {
-                    LetterControl script = child.GetComponent<LetterControl>();
-                    if (script)
-                    {
-                        script.SetLetter(' ');
-                    } 
-                }
-            }
-            indicatorManager.MoveIndicator(letterIndex*1.25f);
+            currentGuess = currentGuess.Remove(currentGuess.Length-1);
+            Transform letterTransf = transform.GetChild(currentGuess.Length);
+            LetterControl letterControl = letterTransf.GetComponent<LetterControl>();
+            letterControl.SetLetter(' ');
+            indicatorManager.MoveIndicator(currentGuess.Length*1.25f);
         }
     }
 
     public void EnterWord()
     {
-        if(letterIndex==5 && wordRandomizer.IsInList(GetWord()))
+        if(currentGuess.Length==5 && wordRandomizer.IsInList(currentGuess))
         {
-            letterIndex = 0;
             ReviseLetters();
         }
     }
 
+    /*
     private string GetWord()
     {
         string letters = "";
         foreach(Transform child in transform)
         {
-            LetterControl script = child.GetComponent<LetterControl>();
-            if (script)
+            LetterControl letterControl = child.GetComponent<LetterControl>();
+            if (letterControl)
             {
-                letters += script.GetLetter();
+                letters += letterControl.GetLetter();
             }
         }
         letters = letters.ToLower();
         return letters;
     }
+    */
 
     private void ReviseLetters()
     {
-        string letters = GetWord();
-        //StringBuilder wordCopy = new StringBuilder(word);
-        string wordCopy = word;
+        string letters = TextManipulation.RemoveAccents(currentGuess);
+        string wordCopy = answerOfTurn;
         int indexWordCopy = 0;
 
         //primeiro checamos quais letras s�o corretas
         for(int i = 0; i < letters.Length; i++){
-            if(letters[i] == word[i]){
+            if(letters[i] == answerOfTurn[i]){
                 exits[i] = correct;
-                //wordCopy[i] = '0';
                 wordCopy = wordCopy.Remove(indexWordCopy, 1);
                 Debug.Log("Correto na pos " + i.ToString());
                 indexWordCopy--;
@@ -153,7 +136,7 @@ public class WordManager : MonoBehaviour
         //vamos checar quais ganham cor 'amarela' ou 'cinza'
         Debug.Log("Palavra que sobrou: " + wordCopy);
         for(int i = 0; i < letters.Length; i++){
-            if(letters[i] != word[i]){
+            if(letters[i] != answerOfTurn[i]){
                 int indexLetraQuase = wordCopy.IndexOf(letters[i]);
                 if(indexLetraQuase != -1){
                     exits[i] = miss;
@@ -167,81 +150,18 @@ public class WordManager : MonoBehaviour
             }
         }
 
-
-        /*
-        foreach(char letter1 in letters)
-        {
-            if(letter1 )
-            int index2 = 0;
-            bool found = false;
-            foreach(char letter2 in word)
-            {
-                if(letter1 == letter2)
-                {
-                    found = true;
-                    if(exits[index2] != correct)
-                    {
-                        if(index1 == index2)
-                        {
-                            exits[index1] = correct; //send green
-                            /*
-                            Transform child = transform.Find("Letter"+index1.ToString());
-                            if(child != null)
-                            {
-                                LetterControl script = child.GetComponent<LetterControl>();
-                                script.Correct();
-                                script.SetColor(correct);
-                            }
-                            *-/
-                            Debug.Log("Sim");
-                            break;
-                        }
-                        else
-                        {
-                            exits[index1] = miss; //send yellow
-                            Debug.Log("Quase");
-                        }
-                    }
-                    else if(exits[index1] == correct) 
-                    {
-                        exits[index1] = incorrect;
-                        break;
-                    }
-                }
-                index2++;
-            }
-            if (!found)
-            {
-                exits[index1] = incorrect; //send red
-                Debug.Log("Nao");
-            }
-        index1++;
-        }
-        */
-        clear(0);
-
         bool allCorrect = true;
-
         Debug.Log(letters);
-
         foreach(Color exit in exits)
         {
             if(exit != correct) 
             {
                 allCorrect = false;
             }
-            //Debug.Log(exit);
         }
 
-        if(allCorrect)
-        {
-            int x = previousWords.Count;
-            answerManager.CreateAnswer(previousWords[x-1],exits,fontOnWhite);
-        }
-        else
-        {
-            answerManager.CreateAnswer(letters,exits,fontOnWhite);
-        }
+        answerManager.CreateAnswer(allCorrect ? previousWords[previousWords.Count-1] : letters,exits,fontOnWhite);
+
         keyboardManager.EntryLetters(letters.ToUpper(),exits);
 
         //Debug.Log("All correct: ");
@@ -249,75 +169,69 @@ public class WordManager : MonoBehaviour
         if(allCorrect)
         {
             IncreaseScore();
-            GenerateNewWord();
-            clear(1);
+            GenerateNewAnswer();
         }
         else
         {
             allTries++;
             tries++;
         }
+        ClearGuess(isAllCorrect: allCorrect);
 
         UpdateText();
+        currentGuess = "";
     }
 
-    private void IncreaseIndex()
+    /*
+    private void CheckPreviouslyGuessedLetters()
     {
-        letterIndex++;
-        Transform child = transform.Find("Letter"+letterIndex.ToString());
+        Transform child = transform.Find("Letter"+currentGuess.Length.ToString());
         if(child != null)
         {
-            LetterControl script = child.GetComponent<LetterControl>();
-            if(script.GetColor() == correct)
+            LetterControl letterControl = child.GetComponent<LetterControl>();
+            if(letterControl.GetColor() == correct)
             {
-                script.SetLetter(word.ToCharArray()[letterIndex]);
-                IncreaseIndex();
+                currentGuess += answerOfTurn.ToCharArray()[letterIndex];
+                letterControl.SetLetter(answerOfTurn.ToCharArray()[letterIndex]);
+                CheckPreviouslyGuessedLetters();
             }
         }
     }
+    */
 
-    private void clear(int code)
+    private void ClearGuess(bool isAllCorrect)
     {
-        if(code == 0)
+        if(!isAllCorrect)
         {
             foreach(Transform child in transform)
             {
-                LetterControl script = child.GetComponent<LetterControl>();
-                if (script)
+                LetterControl letterControl = child.GetComponent<LetterControl>();
+                if (letterControl && !letterControl.isCorrect)
                 {
-                    if(!script.isCorrect)
-                    {
-                        script.SetLetter(' ');
-                    }
+                    letterControl.SetLetter(' ');
                 }
             }
         }
-        else if(code == 1)
+        else
         {
             foreach(Transform child in transform)
             {
-                LetterControl script = child.GetComponent<LetterControl>();
-                if (script)
+                LetterControl letterControl = child.GetComponent<LetterControl>();
+                if (letterControl)
                 {
-                    script.SetLetter(' ');
-                    script.isCorrect = false;
-                    script.SetColor(defaultColor);
+                    letterControl.SetLetter(' ');
+                    letterControl.isCorrect = false;
+                    letterControl.SetColor(defaultColor);
                 }
             }
-            keyboardManager.Reset();
+            keyboardManager.ResetColors();
         }
-    }
-
-    private void DecreaseIndex()
-    {
-        letterIndex--;
     }
 
     private void IncreaseScore()
     {
         hits++;
-        if(tries != 0) scorePoints += 1000/tries;
-        else scorePoints += 1000;
+        scorePoints += tries <= 0 ? 1000 : 1000/tries;
         tries = 0;
     }
 
