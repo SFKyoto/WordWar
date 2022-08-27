@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TextManipulation
+public static class SinglePlayerTextManipulation
 {
     public static string RemoveAccents(string texto)
     {
