@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LetterControl : MonoBehaviour
+public class GUIGuessedWordManager : MonoBehaviour
 {
     public ParticleSystem particleSystem;
-    public Text text;
-    private Color status;
+    public Text letter;
+    private Color bgColor;
     public bool isCorrect = false;
 
     public void SetLetter(char letter)
     {
-        text.text = letter.ToString().ToUpper();
+        //Debug.Log(letter);
+        this.letter.text = letter.ToString().ToUpper();
     }
 
     public void Correct()
@@ -23,23 +24,23 @@ public class LetterControl : MonoBehaviour
 
     public char GetLetter()
     {
-        return text.text.ToCharArray()[0];
+        return letter.text.ToCharArray()[0];
     }
 
-    public void SetColor(Color _status)
+    public void SetBgColor(Color _status)
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = _status;
-        status = _status;
+        bgColor = _status;
     }
 
     public Color GetColor()
     {
-        return status;
+        return bgColor;
     }
 
-    public void SetFontColor(Color colorFont)
+    public void SetFontColor(Color fontColor)
     {
-        text.color =  colorFont;
+        letter.color = fontColor;
     }
 }

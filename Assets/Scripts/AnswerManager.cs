@@ -5,32 +5,31 @@ using UnityEngine;
 public class AnswerManager : MonoBehaviour
 {
     public GameObject letterSquare;
+    public float animationTime;
 
-    private int answerIndex = 0;
-
-    public float animationTime = 1.3f;
-
-    public void CreateAnswer(string answer, Color[] colors, Color fontColor)
+    /// <summary>
+    /// Checa a resposta da rodada com a palavra tentada pelo usuário, e se for correta move as respostas para cima.
+    /// </summary>
+    public void CreateAnswerSprites(string answer, Color[] attempBgColors, Color fontColor)
     {
         for(int i=0;i<answer.Length;i++)
         {
-            //GameObject newLetterSquare = Instantiate(letterSquare) as GameObject;
-            //newLetterSquare.transform(new Vector3((i*1.25f)-2.5f,2.25f-answerIndex*1.25f,0));
             GameObject newLetterSquare = Instantiate(letterSquare,new Vector3((i*1.25f)-2.5f,0.5f,0),Quaternion.identity, transform) as GameObject;
-            LetterControl letterControl = newLetterSquare.GetComponent<LetterControl>();
-            if(letterControl)
+            GUIGuessedWordManager guiGuessLetter = newLetterSquare.GetComponent<GUIGuessedWordManager>();
+            if(guiGuessLetter)
             {
-                letterControl.SetLetter(answer.ToCharArray()[i]);
-                letterControl.SetColor(colors[i]);
-                letterControl.SetFontColor(fontColor);
+                guiGuessLetter.SetLetter(answer.ToCharArray()[i]);
+                guiGuessLetter.SetBgColor(attempBgColors[i]);
+                guiGuessLetter.SetFontColor(fontColor);
             } 
         }
-        MoveAnswers();
-        answerIndex++;
+        MoveAnswersUp();
     }
 
-    /*Move respostas para o topo da tela.*/
-    public void MoveAnswers()
+    /// <summary>
+    /// Move respostas anteriores para o topo da tela.
+    /// </summary>
+    public void MoveAnswersUp()
     {
         foreach(Transform child in transform)
         {

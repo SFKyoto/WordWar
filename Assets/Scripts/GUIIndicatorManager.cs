@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IndicatorManager : MonoBehaviour
+public class GUIIndicatorManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public void MoveIndicator(float pos)
