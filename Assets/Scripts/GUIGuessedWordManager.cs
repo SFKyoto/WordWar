@@ -12,7 +12,7 @@ public class GUIGuessedWordManager : MonoBehaviour
 
     public void SetLetter(char letter)
     {
-        Debug.Log(letter);
+        //Debug.Log(letter);
         this.letter.text = letter.ToString().ToUpper();
     }
 

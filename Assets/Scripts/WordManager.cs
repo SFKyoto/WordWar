@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class WordManager : MonoBehaviour
 {
     public AnswerManager guiAnswerManager;
     public GUIIndicatorManager guiIndicatorManager;
-    public SinglePlayerWordsManager wordsManager;
+    public GameGuessesManager wordsManager;
     public GUIKeyboardManager guiKeyboardManager;
 
     [Header("Text Objects")]
@@ -17,8 +18,6 @@ public class WordManager : MonoBehaviour
 
     [Header("Round State")]
     public string currentGuess = "";
-    public string answerOfTurn = "cobra";
-    public string answerOfTurnNoAccents;
     public List<string> previousWords = new List<string>();
     private int currentScore = 0;
     private int triesCount = 0;
@@ -34,6 +33,7 @@ public class WordManager : MonoBehaviour
     public Color fontOnWhite;
     
     private Color[] exits;
+    private Dictionary<char, Color> letterColorsDict = new Dictionary<char, Color>();
 
     private readonly string validLetters = "qwertyuiopasdfghjklçzxcvbnm";
 
@@ -47,16 +47,13 @@ public class WordManager : MonoBehaviour
         //        guiGessedWordManager.SetFontColor(fontOnBlack);
         //    }
         //}
-        //StartCoroutine(WaitForSeconds(0.5f));
-        GenerateNewAnswer();
+
+        letterColorsDict.Add('C', correct);
+        letterColorsDict.Add('M', miss);
+        letterColorsDict.Add('I', incorrect);
+
+        exits = new Color[5];
     }
-
-    //IEnumerator WaitForSeconds(float time)
-    //{
-    //    yield return new WaitForSeconds(time);
-    //    GenerateNewAnswer();
-    //}
-
     void Update()
     {
         foreach (char letter in Input.inputString.ToLower())
@@ -76,14 +73,6 @@ public class WordManager : MonoBehaviour
         }
     }
 
-    private void GenerateNewAnswer() 
-    {
-        answerOfTurn = wordsManager.GetRandomAnswer();
-        previousWords.Add(answerOfTurn);
-        answerOfTurnNoAccents = SinglePlayerTextManipulation.RemoveAccents(answerOfTurn);
-        exits = new Color[answerOfTurnNoAccents.Length];
-    }
-
     public void TypeLetter(char letter)
     {
         Debug.Log(currentGuess.Length);
@@ -98,7 +87,10 @@ public class WordManager : MonoBehaviour
         }
     }
 
-    public void DeleteLetter()
+    /// <summary>
+    /// Remove a última letra digitada da memória e da interface.
+    /// </summary>
+    private void DeleteLetter()
     {
         if(currentGuess.Length > 0)
         {
@@ -110,9 +102,9 @@ public class WordManager : MonoBehaviour
         }
     }
 
-    public void EnterWord()
+    private void EnterWord()
     {
-        if(currentGuess.Length==5 && wordsManager.IsInList(currentGuess))
+        if(currentGuess.Length==5)
         {
             ReviseLetters();
         }
@@ -134,110 +126,48 @@ public class WordManager : MonoBehaviour
         }
     }
 
-    /*
-    private string GetWord()
-    {
-        string currentGuessNoAccents = "";
-        foreach(Transform child in transform)
-        {
-            LetterControl guiLetterManager = child.GetComponent<LetterControl>();
-            if (guiLetterManager)
-            {
-                currentGuessNoAccents += guiLetterManager.GetLetter();
-            }
-        }
-        currentGuessNoAccents = currentGuessNoAccents.ToLower();
-        return currentGuessNoAccents;
-    }
-    */
-
+    /// <summary>
+    /// Envia tentativa do usuário para wordsManager e verifica se o resultado recebido é uma palavra acertada.
+    /// </summary>
     private void ReviseLetters()
     {
-        string currentGuessNoAccents = SinglePlayerTextManipulation.RemoveAccents(currentGuess);
-        string answerCopy = answerOfTurnNoAccents;
-        int indexWordCopy = 0;
-
-        //primeiro checamos quais letras s�o corretas
-        Debug.Log(currentGuessNoAccents);
-        Debug.Log(answerCopy);
-        for(int i = 0; i < currentGuessNoAccents.Length; i++){
-            if(currentGuessNoAccents[i] == answerOfTurnNoAccents[i]){
-                exits[i] = correct;
-                answerCopy = answerCopy.Remove(indexWordCopy, 1);
-                Debug.Log("Correto na pos " + i.ToString());
-                indexWordCopy--;
-                Debug.Log("wordCopy agora: " + answerCopy);
-            }
-            indexWordCopy++;
-        }
-
-        //answerCopy s� tem as letras incorretas agora
-        //ex: MYLLA + tentativa LLLAL = MYLA
-        //vamos checar quais ganham cor 'amarela' ou 'cinza'
-        Debug.Log("Palavra que sobrou: " + answerCopy);
-        for(int i = 0; i < currentGuessNoAccents.Length; i++){
-            if(currentGuessNoAccents[i] != answerOfTurnNoAccents[i]){
-                int indexLetraQuase = answerCopy.IndexOf(currentGuessNoAccents[i]);
-                if(indexLetraQuase != -1){
-                    exits[i] = miss;
-                    Debug.Log("Quase na pos " + i.ToString());
-                    answerCopy = answerCopy.Remove(indexLetraQuase, 1);
-                }
-                else{
-                    exits[i] = incorrect;
-                    Debug.Log("Erradissimo na pos " + i.ToString());
-                }
-            }
-        }
-
         bool allCorrect = true;
-        Debug.Log(currentGuessNoAccents);
-        foreach(Color exit in exits)
+        Debug.Log(currentGuess);
+        string checkedWord = wordsManager.GetCheckedAttempt(currentGuess);
+        Debug.Log("attempt string chain: " + new string(checkedWord));
+        if (checkedWord == "X")
         {
-            if(exit != correct) 
-            {
-                allCorrect = false;
-            }
-        }
-
-        guiAnswerManager.CreateAnswerSprites(allCorrect ? previousWords[previousWords.Count-1] : currentGuessNoAccents,exits,fontOnWhite);
-
-        guiKeyboardManager.PaintKeyboardLetters(currentGuessNoAccents.ToUpper(),exits);
-
-        //Debug.Log("All correctColor: ");
-        //Debug.Log(allCorrect);
-        if(allCorrect)
-        {
-            IncreaseScore();
-            GenerateNewAnswer();
+            ShakeLetters();
+            allCorrect = false;
         }
         else
         {
-            triesCount++;
-            currentTries++;
-        }
-        ClearGuess(isAllCorrect: allCorrect);
-
-        UpdateStatsText();
-        currentGuess = "";
-    }
-
-    /*
-    private void CheckPreviouslyGuessedLetters()
-    {
-        Transform child = transform.Find("Letter"+currentGuess.Length.ToString());
-        if(child != null)
-        {
-            LetterControl guiLetterManager = child.GetComponent<LetterControl>();
-            if(guiLetterManager.GetColor() == correctColor)
+            for (int i = 0; i < checkedWord.Length; i++)
             {
-                currentGuess += answerOfTurnNoAccents.ToCharArray()[letterIndex];
-                guiLetterManager.SetLetter(answerOfTurnNoAccents.ToCharArray()[letterIndex]);
-                CheckPreviouslyGuessedLetters();
+                exits[i] = letterColorsDict[checkedWord[i]];
+                allCorrect = allCorrect && (checkedWord[i] == 'C');
             }
+
+            if (allCorrect)
+            {
+                previousWords.Add(currentGuess);
+                IncreaseScore();
+            }
+            else
+            {
+                triesCount++;
+                currentTries++;
+            }
+
+            string currentGuessNoAccents = SinglePlayerTextManipulation.RemoveAccents(currentGuess);
+            guiAnswerManager.CreateAnswerSprites(allCorrect ? previousWords[previousWords.Count - 1] : currentGuessNoAccents, exits, fontOnWhite);
+            guiKeyboardManager.PaintKeyboardLetters(currentGuessNoAccents.ToUpper(), exits);
+
+            UpdateStatsText();
+            ClearGuess(isAllCorrect: allCorrect);
+            currentGuess = "";
         }
     }
-    */
 
     private void ClearGuess(bool isAllCorrect)
     {

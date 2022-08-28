@@ -727,11 +727,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 497692050}
-  - component: {fileID: 497692051}
   - component: {fileID: 497692052}
   - component: {fileID: 497692053}
   m_Layer: 0
-  m_Name: SquareManager
+  m_Name: WordsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -757,19 +756,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &497692051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497692049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35d82a3754c76a247ab4b4b89a9474f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wordManager: {fileID: 497692052}
 --- !u!114 &497692052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -782,16 +768,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec9c610fbe8c3648ac5bd3f4a80f03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  answerManager: {fileID: 803959184}
-  indicatorManager: {fileID: 927720116}
-  wordRandomizer: {fileID: 497692053}
-  keyboardManager: {fileID: 2052745585}
+  guiAnswerManager: {fileID: 803959184}
+  guiIndicatorManager: {fileID: 927720116}
+  wordsManager: {fileID: 1635114005}
+  guiKeyboardManager: {fileID: 2052745585}
   TXTScore: {fileID: 689063711}
   TXTTriesCount: {fileID: 93871164}
   TXTSuccesfullGuesses: {fileID: 213832945}
   currentGuess: 
-  answerOfTurn: cobra
-  answerOfTurnNoAccents: 
   previousWords: []
   defaultColor: {r: 0.22352941, g: 0.20784314, b: 0.2509804, a: 1}
   correct: {r: 0.4627451, g: 1, b: 0.36862746, a: 1}
@@ -806,13 +790,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 497692049}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   listPossibleAnswers: []
   listAllowedGuesses: []
+  answerOfTurn: cobra
+  answerOfTurnNoAccents: 
 --- !u!4 &506105010 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6391659914910049448, guid: dd8e182c86166f540b29c8fae7c52271, type: 3}
@@ -1230,7 +1216,7 @@ GameObject:
   - component: {fileID: 803959185}
   - component: {fileID: 803959184}
   m_Layer: 0
-  m_Name: AnswerManager
+  m_Name: GUIAnswerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1263,7 +1249,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &866727290 stripped
 Transform:
@@ -1356,7 +1342,7 @@ GameObject:
   - component: {fileID: 927720114}
   - component: {fileID: 927720116}
   m_Layer: 0
-  m_Name: Indicator
+  m_Name: GUIIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1427,7 +1413,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &927720116
 MonoBehaviour:
@@ -1887,7 +1873,7 @@ GameObject:
   - component: {fileID: 1329585995}
   - component: {fileID: 1329585994}
   m_Layer: 5
-  m_Name: GUI
+  m_Name: GUIText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1970,7 +1956,7 @@ RectTransform:
   - {fileID: 93871163}
   - {fileID: 213832944}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2234,6 +2220,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd8e182c86166f540b29c8fae7c52271, type: 3}
+--- !u!1 &1635114004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1635114006}
+  - component: {fileID: 1635114005}
+  m_Layer: 0
+  m_Name: SinglePlayerGameMode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1635114005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635114004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listPossibleAnswers: []
+  listAllowedGuesses: []
+  answerOfTurn: cobra
+  answerOfTurnNoAccents: 
+--- !u!4 &1635114006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635114004}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.46827075, y: -0.15994768, z: 0.6258161}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1713049388 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6391659914910049448, guid: dd8e182c86166f540b29c8fae7c52271, type: 3}
@@ -3199,7 +3233,7 @@ GameObject:
   - component: {fileID: 2052745584}
   - component: {fileID: 2052745585}
   m_Layer: 0
-  m_Name: KeyboardManager
+  m_Name: GUIKeyboardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3245,7 +3279,7 @@ Transform:
   - {fileID: 538958998}
   - {fileID: 506105010}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2052745585
 MonoBehaviour:
