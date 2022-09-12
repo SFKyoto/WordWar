@@ -22,6 +22,6 @@ public class GUIControl : MonoBehaviour
 
     public void onQuit()
     {
-        SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
+        SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
     }
 }
