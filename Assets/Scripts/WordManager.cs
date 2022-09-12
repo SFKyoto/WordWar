@@ -10,6 +10,7 @@ public class WordManager : MonoBehaviour
     public GUIIndicatorManager guiIndicatorManager;
     public GameGuessesManager wordsManager;
     public GUIKeyboardManager guiKeyboardManager;
+    public GUIControl guiControl;
 
     [Header("Text Objects")]
     public Text TXTScore;
@@ -56,6 +57,10 @@ public class WordManager : MonoBehaviour
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            guiControl.MenuToggle();
+        }
         foreach (char letter in Input.inputString.ToLower())
         {
             if (letter == '\b')
