@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class AvatarManager : MonoBehaviour
 {
-    public TextAsset avatarJSON;
+    public TextAsset defaultAvatar;
 
     [System.Serializable]
     public class BodyPart
@@ -21,18 +22,10 @@ public class AvatarManager : MonoBehaviour
         public BodyPart[] bodyParts;
     }
 
-    [System.Serializable]
-    public class SpriteList
-    {
-        public Sprite[] sprite;
-    }
-
     public BodyPartList bodyPartList = new BodyPartList();
-    public SpriteList[] spriteLists;
 
     //ordem corpo, olho, boca, cabelo
     public GameObject[] parts;
-    public int[] partId;
 
     void Start()
     {
@@ -42,7 +35,7 @@ public class AvatarManager : MonoBehaviour
         }
         else
         {
-            FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(bodyPartList));
+            FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(defaultAvatar.text));
         }
         AvatarUpdate();
     }
@@ -50,7 +43,7 @@ public class AvatarManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AvatarUpdate();
+        // AvatarUpdate();
     }
 
     void AvatarUpdate()
@@ -58,7 +51,11 @@ public class AvatarManager : MonoBehaviour
         foreach (BodyPart bodyPart in bodyPartList.bodyParts)
         {
             Image image = parts[bodyPart.bodyPartType].GetComponent<Image>();
-            image.sprite = spriteLists[bodyPart.bodyPartType].sprite[bodyPart.bodyPartId];
+            Sprite sprite = Resources.Load<Sprite>("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
+            Debug.Log(sprite);
+            image.sprite = sprite;
+            Debug.Log("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
+            //image.sprite = spriteLists[bodyPart.bodyPartType].sprite[bodyPart.bodyPartId];
             image.color = bodyPart.bodyPartColor;
         }
     }
