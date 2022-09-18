@@ -12,7 +12,7 @@ public class WordManager : MonoBehaviour
     public GUIKeyboardManager guiKeyboardManager;
     public GUIControl guiControl;
 
-    [Header("Text Labels")]
+    [Header("Text Objects")]
     public Text TXTScore;
     public Text TXTTriesCount;
     public Text TXTSuccesfullGuesses;
@@ -21,10 +21,9 @@ public class WordManager : MonoBehaviour
     public string currentGuess = "";
     public List<string> previousWords = new List<string>();
     private int currentScore = 0;
-    //private int triesCount = 0;
+    private int triesCount = 0;
     private int currentTries = 0;
     private int successfulGuesses = 0;
-    public bool isKeyboardLocked = false;
 
     [Header("Colors")]
     public Color defaultColor;
@@ -34,7 +33,7 @@ public class WordManager : MonoBehaviour
     public Color fontOnBlack;
     public Color fontOnWhite;
     
-    private Color[] returnedColors;
+    private Color[] exits;
     private Dictionary<char, Color> letterColorsDict = new Dictionary<char, Color>();
 
     private readonly string validLetters = "qwertyuiopasdfghjklçzxcvbnm";
@@ -50,41 +49,38 @@ public class WordManager : MonoBehaviour
         //    }
         //}
 
-        letterColorsDict.Add((char)AttempededLetter.Missed, miss);
-        letterColorsDict.Add((char)AttempededLetter.NotInWord, incorrect);
+        letterColorsDict.Add('C', correct);
+        letterColorsDict.Add('M', miss);
+        letterColorsDict.Add('I', incorrect);
 
-        returnedColors = new Color[5];
+        exits = new Color[5];
     }
     void Update()
     {
-        if (!isKeyboardLocked)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-			if (Input.GetKeyDown(KeyCode.Escape))
-			{
-                guiControl.MenuToggle();
-                return;
-			}
-            foreach (char letter in Input.inputString.ToLower())
+            guiControl.MenuToggle();
+        }
+        foreach (char letter in Input.inputString.ToLower())
+        {
+            if (letter == '\b')
             {
-				
-                if (letter == '\b')
-                {
-                    DeleteLetter();
-                }
-                else if (letter == '\n' || letter == '\r')
-                {
-                    EnterWord();
-                }
-                else if (validLetters.Contains(letter.ToString()))
-                {
-                    TypeLetter(letter);
-                }
+                DeleteLetter();
+            }
+            else if (letter == '\n' || letter == '\r')
+            {
+                EnterWord();
+            }
+            else if (validLetters.Contains(letter.ToString()))
+            {
+                TypeLetter(letter);
             }
         }
     }
 
     public void TypeLetter(char letter)
     {
+        Debug.Log(currentGuess.Length);
         if(currentGuess.Length < 5)
         {
             currentGuess += letter;
@@ -136,24 +132,14 @@ public class WordManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Envia tentativa do usuário para wordsManager; para o singleplayer, o próximo passo é invocar ReceiveAttemptedLetters().
+    /// Envia tentativa do usuário para wordsManager e verifica se o resultado recebido é uma palavra acertada.
     /// </summary>
     private void ReviseLetters()
     {
-        isKeyboardLocked = true;
-        Debug.Log($"ReviseLetters - {currentGuess}");
-        string checkedWord = wordsManager.GetCheckedAttempt(currentGuess);
-        if(checkedWord != "") ReceiveAttemptedLetters(checkedWord);
-    }
-
-    /// <summary>
-    /// Verifica se o resultado recebido é uma palavra acertada e gera a lógica de pintar teclas/letras.
-    /// </summary>
-    public void ReceiveAttemptedLetters(string checkedWord)
-    {
-        Debug.Log($"Recebendo {checkedWord}");
-        Debug.Log($"currentGuess: {currentGuess}");
         bool allCorrect = true;
+        Debug.Log(currentGuess);
+        string checkedWord = wordsManager.GetCheckedAttempt(currentGuess);
+        Debug.Log("attempt string chain: " + new string(checkedWord));
         if (checkedWord == "X")
         {
             ShakeLetters();
@@ -161,39 +147,31 @@ public class WordManager : MonoBehaviour
         }
         else
         {
-            System.Text.StringBuilder checkedWordEditable = new System.Text.StringBuilder(checkedWord);
             for (int i = 0; i < checkedWord.Length; i++)
             {
-                try
-                {
-                    returnedColors[i] = letterColorsDict[checkedWord[i]];
-                    checkedWordEditable[i] = currentGuess[i];
-                    allCorrect = false;
-                }
-                catch
-                {
-                    returnedColors[i] = correct;
-                }
-                //allCorrect = allCorrect && (checkedWord[i] != (char)AttempededLetter.Missed && checkedWord[i] != (char)AttempededLetter.NotInWord);
+                exits[i] = letterColorsDict[checkedWord[i]];
+                allCorrect = allCorrect && (checkedWord[i] == 'C');
             }
 
-            currentTries++;
             if (allCorrect)
             {
-                previousWords.Add(checkedWord);
+                previousWords.Add(currentGuess);
                 IncreaseScore();
+            }
+            else
+            {
+                triesCount++;
+                currentTries++;
             }
 
             string currentGuessNoAccents = SinglePlayerTextManipulation.RemoveAccents(currentGuess);
-            //guiAnswerManager.CreateAnswerSprites(allCorrect ? checkedWord : currentGuessNoAccents, returnedColors, fontOnWhite);
-            guiAnswerManager.CreateAnswerSprites(checkedWordEditable.ToString(), returnedColors, fontOnWhite);
-            guiKeyboardManager.PaintKeyboardLetters(currentGuessNoAccents.ToUpper(), returnedColors);
+            guiAnswerManager.CreateAnswerSprites(allCorrect ? previousWords[previousWords.Count - 1] : currentGuessNoAccents, exits, fontOnWhite);
+            guiKeyboardManager.PaintKeyboardLetters(currentGuessNoAccents.ToUpper(), exits);
 
             UpdateStatsText();
             ClearGuess(isAllCorrect: allCorrect);
             currentGuess = "";
         }
-        isKeyboardLocked = false;
     }
 
     private void ClearGuess(bool isAllCorrect)
@@ -228,14 +206,14 @@ public class WordManager : MonoBehaviour
     private void IncreaseScore()
     {
         successfulGuesses++;
-        currentScore += currentTries <= 0 ? (currentTries > 5 ? 0 : 1000) : 1000/currentTries;
+        currentScore += currentTries <= 0 ? 1000 : 1000/currentTries;
         currentTries = 0;
     }
 
     private void UpdateStatsText()
     {
         TXTScore.text = "Pontos: " + currentScore.ToString();
-        TXTTriesCount.text = "Tentativas: " + currentTries.ToString();
+        TXTTriesCount.text = "Tentativas: " + triesCount.ToString();
         TXTSuccesfullGuesses.text = "Acertos: " + successfulGuesses.ToString();
     }
 }

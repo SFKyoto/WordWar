@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
 public class ServerManager : MonoBehaviour
@@ -16,19 +17,19 @@ public class ServerManager : MonoBehaviour
     {
         startHost.onClick.AddListener(() =>
         {
-            //if(NetworkClientManager.Singleton.StartHost())
-            //{
-            //    Debug.Log("Servidor iniciado...");
-            ChangeScene();
-            //}
-            //else Debug.Log("Error...");
+            if(NetworkManager.Singleton.StartHost())
+            {
+                Debug.Log("Servidor iniciado...");
+                ChangeScene();
+            }
+            else Debug.Log("Error...");
         });
 
         startClient.onClick.AddListener(() =>
         {
-            //if(NetworkClientManager.Singleton.StartClient())
-            //    Debug.Log("Client iniciado...");
-            //else Debug.Log("Error...");
+            if(NetworkManager.Singleton.StartClient())
+                Debug.Log("Client iniciado...");
+            else Debug.Log("Error...");
         });
     }
 

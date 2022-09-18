@@ -5,13 +5,9 @@ EditorUserSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 4
   m_ConfigSettings:
-    UnityRemoteCompression:
-      value: 337f73
+    RecentlyUsedSceneGuid-0:
+      value: 5b07015f52065a020b575e27147b0e44124e417b7e7174617d7f4b32b7b1373b
       flags: 0
-<<<<<<< HEAD
-    UnityRemoteResolution:
-      value: 2d5e460b0459
-=======
     RecentlyUsedSceneGuid-1:
       value: 525357525253590f0f5a5c2644720c444f154a2c75787e667b2b4563b0b3373e
       flags: 0
@@ -25,10 +21,10 @@ EditorUserSettings:
       value: 5707075f00025a095c08582743220e44421549287f797e6329701e31b3b0353d
       flags: 0
     RecentlyUsedSceneGuid-5:
-      value: 0750570355055103095f5827117a0c4415154e727c2b20317f2a1c6bb4b4616a
+      value: 5509065007050c5a5957542711255b444e4f1b787e7b7f322b2f4c32b4e2616a
       flags: 0
     RecentlyUsedSceneGuid-6:
-      value: 5509065007050c5a5957542711255b444e4f1b787e7b7f322b2f4c32b4e2616a
+      value: 0750570355055103095f5827117a0c4415154e727c2b20317f2a1c6bb4b4616a
       flags: 0
     RecentlyUsedScenePath-0:
       value: 224247031146466b011b0b2b1e3010201f0f1d263c2427332824183df6af3d0cf5e233e7a8093e31290eea73373f0c2ffe0f471ef8021e12
@@ -38,7 +34,6 @@ EditorUserSettings:
       flags: 0
     RecentlyUsedScenePath-2:
       value: 22424703114646680e0b0227036c4b150503563f22213229
->>>>>>> 58e309f85ba23e071b29ce7d0934cb2cbe027c0b
       flags: 0
     vcSharedLogLevel:
       value: 0d5e400f0650
