@@ -105,7 +105,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             {
                 if (player.Value.PalavraAtual < barrierProgress)
                 {
-                    //you won!
+                    //you (player 0) won!
                     foreach (KeyValuePair<ushort, PlayerManager> player2 in PlayerManager.playerList)
                     {
                         Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);

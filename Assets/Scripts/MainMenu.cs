@@ -5,15 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void onMultiplayerPressed()
+    public string IP;
+    
+    public void onMainMenuPressed()
     {
-        //Vai Pro lobby
+        SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
     }
 
     public void onSingleplayerPressed()
     {
-        //vai pro modo Single
         SceneManager.LoadScene("Assets/Scenes/SinglePlayer.unity", LoadSceneMode.Single);
+    }
+
+    public void onMultiplayerSelectionPressed()
+    {
+        SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
     }
 
     public void onAboutPressed()
@@ -25,5 +31,23 @@ public class MainMenu : MonoBehaviour
     {
         //fecha o jogo
         Application.Quit();
+    }
+
+    public void onServerIPChanged(string IP)
+    {
+        this.IP = IP;
+        //this.IP = IP.Replace(".", "");
+    }
+
+    public void onMultiplayerClientPressed()
+    {
+
+        //this.IP = IP.Replace(".", "");
+    }
+
+    public void onMultiplayerServerPressed()
+    {
+        NetworkServerManager.Singleton.Server.Start(1237, 3);
+        //para tela de lobby
     }
 }
