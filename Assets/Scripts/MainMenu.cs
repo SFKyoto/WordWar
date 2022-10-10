@@ -21,6 +21,11 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
     }
+    
+    public void onAvatarSelectionPressed()
+    {
+        SceneManager.LoadScene("Assets/Scenes/AvatarMenu.unity", LoadSceneMode.Single);
+    }
 
     public void onAboutPressed()
     {
@@ -47,7 +52,8 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerServerPressed()
     {
-        NetworkServerManager.Singleton.Server.Start(1237, 3);
+        SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
+        //NetworkServerManager.Singleton.Server.Start(1237, 3);
         //para tela de lobby
     }
 }

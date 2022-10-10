@@ -1,5 +1,6 @@
 using RiptideNetworking;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 //public class PlayerStat
@@ -22,7 +23,7 @@ public class PlayerManager : MonoBehaviour
 
     public ushort Id { get; private set; }
     public string Username { get; private set; }
-    public ushort Avatar { get; private set; }
+    public BodyPart Avatar { get; private set; }
     public ushort PalavraAtual { get; private set; }
     public ushort QtdTentativas { get; private set; }
     //SinglePlayerGuessesManager guessesManager = new SinglePlayerGuessesManager();
