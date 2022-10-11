@@ -35,7 +35,7 @@ public class AvatarManager : MonoBehaviour
         }
         else
         {
-            FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(defaultAvatar.text));
+            bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
         }
         AvatarUpdate();
     }
