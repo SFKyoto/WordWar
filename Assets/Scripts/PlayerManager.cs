@@ -23,7 +23,7 @@ public class PlayerManager : MonoBehaviour
 
     public ushort Id { get; private set; }
     public string Username { get; private set; }
-    public BodyPart Avatar { get; private set; }
+    public BodyPartList Avatar { get; private set; }
     public ushort PalavraAtual { get; private set; }
     public ushort QtdTentativas { get; private set; }
     //SinglePlayerGuessesManager guessesManager = new SinglePlayerGuessesManager();
@@ -35,10 +35,11 @@ public class PlayerManager : MonoBehaviour
     }
     private void OnDestroy()
     {
+        Debug.Log(Id.ToString() + " Sent bye");
         playerList.Remove(Id);
     }
 
-    public static void SpawnPlayer(ushort id, string username)
+    public static void SpawnPlayer(ushort id, PlayerData playerData)
     {
         //foreach (PlayerStat otherPlayer in playerList.Values)
         //    SendSpawned(otherPlayer);
@@ -46,7 +47,8 @@ public class PlayerManager : MonoBehaviour
         PlayerManager playerStat = new PlayerManager
         {
             Id = id,
-            Username = username,
+            Username = playerData.username,
+            Avatar = playerData.bodyPartList,
             PalavraAtual = 0,
             QtdTentativas = 0
         };
@@ -75,8 +77,8 @@ public class PlayerManager : MonoBehaviour
 
     public static string GetGuessFromPlayer(ushort fromClientId, string attempt)
     {
-        if (!playerList.ContainsKey(fromClientId))
-            SpawnPlayer(fromClientId, "Player");
+        //if (!playerList.ContainsKey(fromClientId))
+        //    SpawnPlayer(fromClientId, "Player");
 
         string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].PalavraAtual);
         Debug.Log($"Tentativa da palavra {playerList[fromClientId].PalavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
@@ -92,6 +94,22 @@ public class PlayerManager : MonoBehaviour
             playerList[fromClientId].PalavraAtual++;
         }
         return checkedAttempt;
+    }
+
+    [MessageHandler((ushort)ClientToServerId.playerDataMsg)]
+    private static void GetPlayerData(ushort fromClientId, Message message)
+    {
+        if (!FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
+        {
+            string messageStr = message.GetString();
+            Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
+            PlayerData playerData = JsonUtility.FromJson<PlayerData>(messageStr);
+            SpawnPlayer(fromClientId, playerData);
+        }
+        else
+        {
+            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
+        }
     }
 
     [MessageHandler((ushort)ClientToServerId.wordGuess)]

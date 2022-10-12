@@ -4,23 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
+public class PlayerData
+{
+    public string username;
+    public BodyPartList bodyPartList;
+}
+
+[System.Serializable]
+public class BodyPart
+{
+    public int bodyPartType; //id do tipo da parte
+    public int bodyPartId; //id do sprite
+    public Color bodyPartColor; //cor da parte
+}
+
+[System.Serializable]
+public class BodyPartList
+{
+    public BodyPart[] bodyParts;
+}
+
 public class AvatarManager : MonoBehaviour
 {
     public TextAsset defaultAvatar;
-
-    [System.Serializable]
-    public class BodyPart
-    {
-        public int bodyPartType; //id do tipo da parte
-        public int bodyPartId; //id do sprite
-        public Color bodyPartColor; //cor da parte
-    }
-
-    [System.Serializable]
-    public class BodyPartList
-    {
-        public BodyPart[] bodyParts;
-    }
 
     public BodyPartList bodyPartList = new BodyPartList();
 
