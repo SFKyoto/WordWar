@@ -62,18 +62,26 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                     {
                         Debug.Log($"Should disconnect user {player.Value.Id}");
                         //disconnect a user, barrier got him
-                        foreach (KeyValuePair<ushort, PlayerManager> player2 in PlayerManager.playerList)
-                        {
-                            Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
-                            newMessage.AddUShort(player.Value.Id);
-                            NetworkServerManager.Singleton.Server.Send(newMessage, player2.Value.Id);
-                            NetworkServerManager.Singleton.Server.DisconnectClient(player2.Value.Id);
-                        }
-                        PlayerManager.playerList.Remove(player.Key);
+                        Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
+                        //newMessage.AddUShort(player.Value.Id);
+                        NetworkServerManager.Singleton.Server.Send(playerLostMessage, player.Value.Id);
+                        NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
+                        //foreach (KeyValuePair<ushort, PlayerManager> playerToDisconnect in PlayerManager.playerList)
+                        //{
+                        //    Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
+                        //    newMessage.AddUShort(player.Value.Id);
+                        //    NetworkServerManager.Singleton.Server.Send(newMessage, playerToDisconnect.Value.Id);
+                        //    NetworkServerManager.Singleton.Server.DisconnectClient(playerToDisconnect.Value.Id);
+                        //}
+                        //PlayerManager.playerList.Remove(player.Key);
                     }
                 }
                 timeLeftBetweenWords = timeBetweenGuessedWords;
             }
+
+            Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
+            playerStatsMsg.AddString(JsonUtility.ToJson(PlayerManager.playerList));
+            NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
         }
     }
 
@@ -100,21 +108,27 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         if (PlayerManager.playerList[0].PalavraAtual >= qtdPalavrasJogo)
         {
             Debug.Log($"GAME OVER - Player 0 won!");
+            Message gameOverMessage2 = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+            gameOverMessage2.AddUShort(0);
+            NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage2);
+            NetworkServerManager.Singleton.Server.Stop();
+            //go to result screen
 
-            foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
-            {
-                if (player.Value.PalavraAtual < barrierProgress)
-                {
-                    //you (player 0) won!
-                    foreach (KeyValuePair<ushort, PlayerManager> player2 in PlayerManager.playerList)
-                    {
-                        Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                        newMessage.AddUShort(player.Value.Id);
-                        NetworkServerManager.Singleton.Server.Send(newMessage, player2.Value.Id);
-                        NetworkServerManager.Singleton.Server.DisconnectClient(player2.Value.Id);
-                    }
-                }
-            }
+            //foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
+            //{
+            //    if (player.Value.PalavraAtual < barrierProgress)
+            //    {
+            //        //you (player 0) won!
+
+            //        //foreach (KeyValuePair<ushort, PlayerManager> player2 in PlayerManager.playerList)
+            //        //{
+            //        //    Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+            //        //    newMessage.AddUShort(player.Value.Id);
+            //        //    NetworkServerManager.Singleton.Server.Send(newMessage, player2.Value.Id);
+            //        //    NetworkServerManager.Singleton.Server.DisconnectClient(player2.Value.Id);
+            //        //}
+            //    }
+            //}
         }
 
         return returnedAttempt;
