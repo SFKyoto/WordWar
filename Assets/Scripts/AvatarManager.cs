@@ -28,7 +28,8 @@ public class AvatarManager : MonoBehaviour
 {
     public TextAsset defaultAvatar;
 
-    public BodyPartList bodyPartList = new BodyPartList();
+    public PlayerData playerData = new PlayerData();
+    //public BodyPartList bodyPartList = new BodyPartList();
 
     //ordem corpo, olho, boca, cabelo
     public GameObject[] parts;
@@ -37,11 +38,13 @@ public class AvatarManager : MonoBehaviour
     {
         if (FileManager.FileExists("avatarData.txt"))
         {
-            bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
+            playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
+            playerData.username = "FileExists";
         }
         else
         {
-            bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
+            playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
+            playerData.username = "Usrnm";
         }
         AvatarUpdate();
     }
@@ -52,9 +55,18 @@ public class AvatarManager : MonoBehaviour
         // AvatarUpdate();
     }
 
+    void SavePlayerData()
+    {
+        FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(playerData.bodyPartList));
+    }
+    PlayerData GetPlayerData()
+    {
+        return playerData;
+    }
+
     void AvatarUpdate()
     {
-        foreach (BodyPart bodyPart in bodyPartList.bodyParts)
+        foreach (BodyPart bodyPart in playerData.bodyPartList.bodyParts)
         {
             Image image = parts[bodyPart.bodyPartType].GetComponent<Image>();
             Sprite sprite = Resources.Load<Sprite>("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);

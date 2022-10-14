@@ -30,10 +30,14 @@ public class GUILobbyManager : MonoBehaviour
             
         //}
         PlayerManager[] players = playerList.Values.ToArray();
+        Debug.Log(players.Length);
+        Debug.Log(playerList[0]);
+        Debug.Log(players[0]);
 
         for (int i = 0; i < TXTPlayerData.Length; i++)
         {
-            TXTPlayerData[i].text = players.Length - 1 <= i ? players[i].name : "";
+            Debug.Log("i = " + i.ToString());
+            TXTPlayerData[i].text = players.Length <= i ? "" : players[i].name;
         }
     }
 }

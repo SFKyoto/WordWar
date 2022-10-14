@@ -31,15 +31,20 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         Debug.Log(FindObjectOfType<GUILobbyManager>());
+        PlayerData playerData = new AvatarManager().playerData;
         try
         {
             FindObjectOfType<GUILobbyManager>().SetIPTXT();
+            SpawnPlayer(0, playerData);
         }
         catch(Exception e)
         {
+            Debug.Log(e);
         }
-
+        Debug.Log(playerData);
+        FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
     }
+
     private void OnDestroy()
     {
         Debug.Log(Id.ToString() + " Sent bye");
@@ -96,6 +101,7 @@ public class PlayerManager : MonoBehaviour
             Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
             PlayerData playerData = JsonUtility.FromJson<PlayerData>(messageStr);
             SpawnPlayer(fromClientId, playerData);
+            FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
         }
         else
         {
