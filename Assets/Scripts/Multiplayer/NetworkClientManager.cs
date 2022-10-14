@@ -14,7 +14,8 @@ public enum ServerToClientId : ushort
 
 public enum ClientToServerId : ushort
 {
-    wordGuess = 1,
+    playerDataMsg = 1,
+    wordGuess = 2,
 }
 
 public class NetworkClientManager : MonoBehaviour

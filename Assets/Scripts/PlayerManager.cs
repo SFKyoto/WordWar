@@ -1,4 +1,5 @@
 using RiptideNetworking;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -23,30 +24,45 @@ public class PlayerManager : MonoBehaviour
 
     public ushort Id { get; private set; }
     public string Username { get; private set; }
-    public BodyPart Avatar { get; private set; }
+    public BodyPartList Avatar { get; private set; }
     public ushort PalavraAtual { get; private set; }
     public ushort QtdTentativas { get; private set; }
-    //SinglePlayerGuessesManager guessesManager = new SinglePlayerGuessesManager();
-
 
     private void Start()
     {
-
+        Debug.Log(FindObjectOfType<GUILobbyManager>());
+        PlayerData playerData = new AvatarManager().playerData;
+        try
+        {
+            FindObjectOfType<GUILobbyManager>().SetIPTXT();
+            SpawnPlayer(0, playerData);
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e);
+        }
+        Debug.Log(playerData);
+        FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
     }
+
     private void OnDestroy()
     {
+        Debug.Log(Id.ToString() + " Sent bye");
         playerList.Remove(Id);
     }
 
-    public static void SpawnPlayer(ushort id, string username)
+    public static void SpawnPlayer(ushort id, PlayerData playerData)
     {
-        //foreach (PlayerStat otherPlayer in playerList.Values)
-        //    SendSpawned(otherPlayer);
+        Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);
+        message.AddString(JsonUtility.ToJson(playerData));
+        foreach (PlayerManager otherPlayer in playerList.Values)
+            NetworkServerManager.Singleton.Server.Send(message, otherPlayer.Id);
 
         PlayerManager playerStat = new PlayerManager
         {
             Id = id,
-            Username = username,
+            Username = playerData.username,
+            Avatar = playerData.bodyPartList,
             PalavraAtual = 0,
             QtdTentativas = 0
         };
@@ -55,28 +71,10 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region Messages
-    private void SendSpawned()
-    {
-        NetworkServerManager.Singleton.Server.SendToAll(AddSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.wordAnswer)));
-    }
-
-    private void SendSpawned(ushort toClientId)
-    {
-        NetworkServerManager.Singleton.Server.Send(AddSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.wordAnswer)), toClientId);
-    }
-
-    private Message AddSpawnData(Message message)
-    {
-        message.AddUShort(Id);
-        message.AddString(Username);
-        //message.AddVector3(transform.position);
-        return message;
-    }
-
     public static string GetGuessFromPlayer(ushort fromClientId, string attempt)
     {
-        if (!playerList.ContainsKey(fromClientId))
-            SpawnPlayer(fromClientId, "Player");
+        //if (!playerList.ContainsKey(fromClientId))
+        //    SpawnPlayer(fromClientId, "Player");
 
         string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].PalavraAtual);
         Debug.Log($"Tentativa da palavra {playerList[fromClientId].PalavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
@@ -94,6 +92,23 @@ public class PlayerManager : MonoBehaviour
         return checkedAttempt;
     }
 
+    [MessageHandler((ushort)ClientToServerId.playerDataMsg)]
+    private static void GetPlayerData(ushort fromClientId, Message message)
+    {
+        if (!FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
+        {
+            string messageStr = message.GetString();
+            Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
+            PlayerData playerData = JsonUtility.FromJson<PlayerData>(messageStr);
+            SpawnPlayer(fromClientId, playerData);
+            FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+        }
+        else
+        {
+            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
+        }
+    }
+
     [MessageHandler((ushort)ClientToServerId.wordGuess)]
     private static void GetGuessFromPlayer(ushort fromClientId, Message message)
     {
@@ -108,15 +123,20 @@ public class PlayerManager : MonoBehaviour
 
             if (playerList[fromClientId].PalavraAtual >= FindObjectOfType<MultiPlayerServerGuessesManager>().qtdPalavrasJogo)
             {
-                Debug.Log($"GAME OVER - Player 0 won!");
+                Debug.Log($"GAME OVER - Player {fromClientId} won!");
+                Message gameOverMessage2 = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+                gameOverMessage2.AddUShort(fromClientId);
+                NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage2);
+                NetworkServerManager.Singleton.Server.Stop();
+                //to winning screen
 
-                foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
-                {
-                    Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                    gameOverMessage.AddUShort(player.Value.Id);
-                    NetworkServerManager.Singleton.Server.Send(gameOverMessage, 0);
-                    NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
-                }
+                //foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
+                //{
+                //    Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+                //    gameOverMessage.AddUShort(player.Value.Id);
+                //    NetworkServerManager.Singleton.Server.Send(gameOverMessage, 0);
+                //    NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
+                //}
             }
         }
     }

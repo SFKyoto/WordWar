@@ -46,8 +46,7 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerClientPressed()
     {
-
-        //this.IP = IP.Replace(".", "");
+        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
     }
 
     public void onMultiplayerServerPressed()
