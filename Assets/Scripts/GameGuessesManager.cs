@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Unity.Netcode;
 
 public enum AttempededLetter
 {
@@ -8,7 +9,7 @@ public enum AttempededLetter
     NotInWord = '-'
 }
 
-public abstract class GameGuessesManager : MonoBehaviour
+public abstract class GameGuessesManager : NetworkBehaviour
 {
     [Header("Word Lists")]
     protected List<string> listPossibleAnswers = new List<string>();

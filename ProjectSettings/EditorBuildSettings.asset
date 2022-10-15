@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multi_Client.unity
     guid: 6f3a1c39d44bb8c4fbc3c77a3b48ed79
+  - enabled: 1
+    path: Assets/Scenes/Multi Teste.unity
+    guid: 56920ac16c6df574f9c6e9086732b503
   m_configObjects: {}

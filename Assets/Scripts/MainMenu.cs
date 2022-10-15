@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerSelectionPressed()
     {
-        SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
+        SceneManager.LoadScene("Assets/Scenes/Multi Teste.unity", LoadSceneMode.Single);
     }
     
     public void onAvatarSelectionPressed()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Unity.Netcode;
 
 public class SinglePlayerGuessesManager : GameGuessesManager
 {
