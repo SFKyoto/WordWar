@@ -17,9 +17,6 @@ public class GUILobbyManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (var txtPlayerData in TXTPlayerData)
-            txtPlayerData.text = "";
-
         isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
         if (isMPlayerModeServer)
         {
@@ -28,6 +25,8 @@ public class GUILobbyManager : MonoBehaviour
         else
         {
             TXTIpAddress.text = "Conectando...";
+            foreach (var txtPlayerData in TXTPlayerData)
+                txtPlayerData.text = "";
             //TXTIpAddress.gameObject.SetActive(false);
         }
     }

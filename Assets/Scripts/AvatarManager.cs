@@ -83,15 +83,18 @@ public class AvatarManager : MonoBehaviour
 
     void AvatarUpdate()
     {
-        foreach (BodyPart bodyPart in playerData.bodyPartList.bodyParts)
+        if(parts.Length > 0)
         {
-            Image image = parts[bodyPart.bodyPartType].GetComponent<Image>();
-            Sprite sprite = Resources.Load<Sprite>("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
-            Debug.Log(sprite);
-            image.sprite = sprite;
-            Debug.Log("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
-            //image.sprite = spriteLists[bodyPart.bodyPartType].sprite[bodyPart.bodyPartId];
-            image.color = bodyPart.bodyPartColor;
+            foreach (BodyPart bodyPart in playerData.bodyPartList.bodyParts)
+            {
+                Image image = parts[bodyPart.bodyPartType].GetComponent<Image>();
+                Sprite sprite = Resources.Load<Sprite>("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
+                Debug.Log(sprite);
+                image.sprite = sprite;
+                Debug.Log("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
+                //image.sprite = spriteLists[bodyPart.bodyPartType].sprite[bodyPart.bodyPartId];
+                image.color = bodyPart.bodyPartColor;
+            }
         }
     }
 }
