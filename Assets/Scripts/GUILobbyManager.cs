@@ -6,6 +6,7 @@ using System.Net;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GUILobbyManager : MonoBehaviour
 {
@@ -16,14 +17,28 @@ public class GUILobbyManager : MonoBehaviour
 
     private void Start()
     {
+        foreach (var txtPlayerData in TXTPlayerData)
+            txtPlayerData.text = "";
+
+        isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
         if (isMPlayerModeServer)
         {
-            TXTIpAddress.text = new WebClient().DownloadString("https://api.ipify.org/");
+            TXTIpAddress.text = "Código da sala: " + new WebClient().DownloadString("https://api.ipify.org/");
         }
         else
         {
-            TXTIpAddress.gameObject.SetActive(false);
+            TXTIpAddress.text = "Conectando...";
+            //TXTIpAddress.gameObject.SetActive(false);
         }
+    }
+
+    public void DidDisconnect()
+    {
+        TXTIpAddress.text = "Desconectado do servidor.";
+    }
+    public void FailedToConnect()
+    {
+        TXTIpAddress.text = "Erro ao se conectar com o servidor.";
     }
 
     /// <summary>
@@ -40,7 +55,7 @@ public class GUILobbyManager : MonoBehaviour
         {
             TXTPlayerData[i].text = players.Length <= i ? "" : (players[i].username);
         }
-        BTNStartMatch.gameObject.SetActive(isMPlayerModeServer && players.Length > 1);
-        //BTNStartMatch.enabled = players.Length > 1;
+        //BTNStartMatch.gameObject.SetActive(isMPlayerModeServer && players.Length > 1);
     }
+
 }

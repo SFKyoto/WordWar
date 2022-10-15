@@ -39,15 +39,15 @@ public class NetworkClientManager : MonoBehaviour
     public Client Client { get; private set; }
     //public string Ip { get => ip; set => ip = value; }
     //public ushort Port { get => port; set => port = value; }
-    public void SetSocket(string ip, ushort port)
+    public void SetSocket(string _ip, ushort _port)
     {
-        this.ip = ip;
-        this.port = port;
+        ip = _ip;
+        port = _port;
         Debug.Log("Socket set.");
     }
 
-    [SerializeField] private string ip;
-    [SerializeField] private ushort port;
+    [SerializeField] static string ip;
+    [SerializeField] static ushort port;
 
     private void Awake()
     {
@@ -56,7 +56,25 @@ public class NetworkClientManager : MonoBehaviour
 
     private void Start()
     {
-        if (ip != null) StartConn();
+        if (PlayerPrefs.GetString("multiPlayerMode") == "client")
+        {
+            ip = PlayerPrefs.GetString("IPSelected");
+            Debug.Log("IP: " + ip);
+            port = 1237;
+            StartConn();
+
+            Message message = Message.Create(MessageSendMode.reliable, (ushort)ClientToServerId.playerDataMsg);
+            message.AddString(JsonUtility.ToJson(FindObjectOfType<AvatarManager>().GetPlayerData()));
+            try
+            {
+                Client.Send(message);
+            }
+            catch(Exception e)
+            {
+                FindObjectOfType<GUILobbyManager>().FailedToConnect();
+            }
+        }
+        else Destroy(this);
     }
     public void StartConn()
     {
@@ -98,7 +116,7 @@ public class NetworkClientManager : MonoBehaviour
     private void FailedToConnect(object sender, EventArgs e)
     {
         Debug.Log("Failed to connect");
-        //UIManager.Singleton.BackToMain();
+        FindObjectOfType<GUILobbyManager>().FailedToConnect();
     }
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
@@ -110,6 +128,6 @@ public class NetworkClientManager : MonoBehaviour
     private void DidDisconnect(object sender, EventArgs e)
     {
         Debug.Log("Player did disconnect");
-        //UIManager.Singleton.BackToMain();
+        FindObjectOfType<GUILobbyManager>().DidDisconnect();
     }
 }

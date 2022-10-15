@@ -19,38 +19,7 @@ public class ServerMessageManager : MonoBehaviour
         //playerList.Remove(Id);
     }
 
-    public static void Spawn(ushort id, string username)
-    {
-        foreach (ServerMessageManager otherPlayer in playerList.Values)
-            otherPlayer.SendSpawned(id);
-
-        //PlayerManager player = Instantiate(GameLogic.Singleton.PlayerPrefab, new Vector3(0f, 1f, 0f), Quaternion.identity).GetComponent<Player>();
-        //player.name = $"Player {id} ({(string.IsNullOrEmpty(username) ? "Guest" : username)})";
-        //player.Id = id;
-        //player.Username = string.IsNullOrEmpty(username) ? $"Guest {id}" : username;
-
-        //player.SendSpawned();
-        //playerList.Add(id, player);
-    }
-
     #region Messages
-    private void SendSpawned()
-    {
-        //NetworkServerManager.Singleton.Server.SendToAll(AddSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerSpawned)));
-    }
-
-    private void SendSpawned(ushort toClientId)
-    {
-        //NetworkServerManager.Singleton.Server.Send(AddSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerSpawned)), toClientId);
-    }
-
-    private Message AddSpawnData(Message message)
-    {
-        message.AddUShort(Id);
-        message.AddString(Username);
-        //message.AddVector3(transform.position);
-        return message;
-    }
 
     private static Message AddGuessCheck(Message message, string attempt)
     {
@@ -64,13 +33,7 @@ public class ServerMessageManager : MonoBehaviour
     {
         string messageStr = message.GetString();
         Debug.Log($"Mensagem do servidor: {messageStr}");
-        //WordManager wordManager = new WordManager();
-        //wordManager.ReceiveAttemptedLetters(messageStr);
         FindObjectOfType<WordManager>().ReceiveAttemptedLetters(messageStr);
-        //NetworkServerManager.Singleton.Server.Send(AddGuessCheck(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerSpawned), messageStr), fromClientId);
-
-        //return message;
-        //playerList.Add(fromClientId, new PlayerManager);
     }
 
     [MessageHandler((ushort)ServerToClientId.serverQuitGame)]
@@ -82,7 +45,8 @@ public class ServerMessageManager : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.playerStats)]
     private static void NewPlayerJoined(Message message)
     {
-        Debug.Log($"A player joined the game.");
+        string playersData = message.GetString();
+        FindObjectOfType<PlayerManager>().SetPlayersData(JsonUtility.FromJson<Dictionary<ushort, PlayerData>> (playersData));
     }
 
     [MessageHandler((ushort)ServerToClientId.youLost)]

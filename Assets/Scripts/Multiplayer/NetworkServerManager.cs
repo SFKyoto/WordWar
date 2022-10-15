@@ -42,14 +42,18 @@ public class NetworkServerManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Starting server...");
-        Application.targetFrameRate = 60;
+        if(PlayerPrefs.GetString("multiPlayerMode") == "server")
+        {
+            Debug.Log("Starting server...");
+            Application.targetFrameRate = 60;
 
-        RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
+            RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 
-        Server = new Server();
-        Server.Start(port, maxClientCount);
-        Server.ClientDisconnected += PlayerLeft;
+            Server = new Server();
+            Server.Start(port, maxClientCount);
+            Server.ClientDisconnected += PlayerLeft;
+        }
+        else Destroy(this);
     }
 
     private void FixedUpdate()

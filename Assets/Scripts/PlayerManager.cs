@@ -10,22 +10,26 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
-        SpawnPlayer(0, playerData);
-        FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
-
-        //NetworkServerManager.Singleton.Server.ClientDisconnected += new EventHandler(s, e) => RemovePlayerFromList(e.Id);
+        if(PlayerPrefs.GetString("multiPlayerMode") == "server"){
+            PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
+            SpawnPlayer(0, playerData); //0 é o servidor
+            FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+        }
     }
 
     public void RemovePlayerFromList(ushort playerId)
     {
-        playerList.Remove(playerId);
+        if (playerList.ContainsKey(playerId))
+        {
+            playerList.Remove(playerId);
+            FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+        }
     }
 
-    private void OnDestroy()
+    public void SetPlayersData(Dictionary<ushort, PlayerData> playerListReceived)
     {
-        //Debug.Log(Id.ToString() + " Sent bye");
-        //playerList.Remove(Id);
+        playerList = playerListReceived;
+        FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
     }
 
     public static void SpawnPlayer(ushort id, PlayerData playerData)
@@ -49,7 +53,7 @@ public class PlayerManager : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.playerDataMsg)]
     private static void GetPlayerData(ushort fromClientId, Message message)
     {
-        if (!FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
+        if (!FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted) //in lobby
         {
             string messageStr = message.GetString();
             Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     public string IP;
-    
+
     public void onMainMenuPressed()
     {
         SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
@@ -40,19 +42,28 @@ public class MainMenu : MonoBehaviour
 
     public void onServerIPChanged(string IP)
     {
-        this.IP = IP;
+        //this.IP = IP;
+        PlayerPrefs.SetString("IPSelected", IP);
         //this.IP = IP.Replace(".", "");
     }
 
     public void onMultiplayerClientPressed()
     {
-        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
+        PlayerPrefs.SetString("multiPlayerMode", "client");
+        SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }
 
     public void onMultiplayerServerPressed()
     {
+        PlayerPrefs.SetString("multiPlayerMode", "server");
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
-        //NetworkServerManager.Singleton.Server.Start(1237, 3);
-        //para tela de lobby
+    }
+
+    public void onMatchStart()
+    {
+        if(PlayerPrefs.GetString("multiPlayerMode") == "server")
+            SceneManager.LoadScene("Assets/Scenes/Multi_Server.unity", LoadSceneMode.Single);
+        else
+            SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
     }
 }

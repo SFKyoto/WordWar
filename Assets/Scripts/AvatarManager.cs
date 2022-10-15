@@ -77,7 +77,6 @@ public class AvatarManager : MonoBehaviour
                 playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
                 playerData.username = "Usrnm";
             }
-            Debug.Log("hee-haw");
         }
         return playerData;
     }
