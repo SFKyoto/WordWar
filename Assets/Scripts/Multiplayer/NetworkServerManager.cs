@@ -69,6 +69,6 @@ public class NetworkServerManager : MonoBehaviour
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
     {
         Debug.Log("A player left.");
-        Destroy(PlayerManager.playerList[e.Id].gameObject); //vai dar erro! vc não está destruindo nada ainda
+        //Destroy(PlayerManager.playerList[e.Id].gameObject); //vai dar erro! vc não está destruindo nada ainda
     }
 }
