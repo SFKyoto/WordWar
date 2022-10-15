@@ -4,70 +4,44 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-//public class PlayerStat
-//{
-//    public PlayerStat(ushort id)
-//    {
-//        Id = id;
-//    }
-
-//    public ushort Id { get; private set; }
-//    public string Username { get; private set; }
-//    public ushort Avatar { get; private set; }
-//    public ushort PalavraAtual { get; private set; }
-//    public ushort QtdTentativas { get; private set; }
-//}
-
 public class PlayerManager : MonoBehaviour
 {
-    public static Dictionary<ushort, PlayerManager> playerList = new Dictionary<ushort, PlayerManager>();
-
-    public ushort Id { get; private set; }
-    public string Username { get; private set; }
-    public BodyPartList Avatar { get; private set; }
-    public ushort PalavraAtual { get; private set; }
-    public ushort QtdTentativas { get; private set; }
+    public static Dictionary<ushort, PlayerData> playerList = new Dictionary<ushort, PlayerData>();
 
     private void Start()
     {
-        Debug.Log(FindObjectOfType<GUILobbyManager>());
-        PlayerData playerData = new AvatarManager().playerData;
-        try
-        {
-            FindObjectOfType<GUILobbyManager>().SetIPTXT();
-            SpawnPlayer(0, playerData);
-        }
-        catch(Exception e)
-        {
-            Debug.Log(e);
-        }
-        Debug.Log(playerData);
+        FindObjectOfType<GUILobbyManager>().SetIPTXT();
+
+        PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
+        SpawnPlayer(0, playerData);
         FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+
+        //NetworkServerManager.Singleton.Server.ClientDisconnected += new EventHandler(s, e) => RemovePlayerFromList(e.Id);
+    }
+
+    private void RemovePlayerFromList(ushort playerId)
+    {
+        playerList.Remove(playerId);
     }
 
     private void OnDestroy()
     {
-        Debug.Log(Id.ToString() + " Sent bye");
-        playerList.Remove(Id);
+        //Debug.Log(Id.ToString() + " Sent bye");
+        //playerList.Remove(Id);
     }
 
     public static void SpawnPlayer(ushort id, PlayerData playerData)
     {
         Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);
         message.AddString(JsonUtility.ToJson(playerData));
-        foreach (PlayerManager otherPlayer in playerList.Values)
+        foreach (PlayerData otherPlayer in playerList.Values)
             NetworkServerManager.Singleton.Server.Send(message, otherPlayer.Id);
 
-        PlayerManager playerStat = new PlayerManager
-        {
-            Id = id,
-            Username = playerData.username,
-            Avatar = playerData.bodyPartList,
-            PalavraAtual = 0,
-            QtdTentativas = 0
-        };
+        playerData.Id = id;
+        playerData.PalavraAtual = 0;
+        playerData.QtdTentativas = 0;
 
-        playerList.Add(id, playerStat);
+        playerList.Add(id, playerData);
     }
 
     #region Messages

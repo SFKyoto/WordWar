@@ -55,7 +55,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             {
                 barrierProgress++;
                 Debug.Log(PlayerManager.playerList.Count);
-                foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
+                foreach (KeyValuePair<ushort, PlayerData> player in PlayerManager.playerList)
                 {
                     Debug.Log($"{player.Value.Id} -> {player.Value.PalavraAtual}");
                     if(player.Value.PalavraAtual < barrierProgress)

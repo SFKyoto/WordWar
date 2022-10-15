@@ -8,6 +8,10 @@ public class PlayerData
 {
     public string username;
     public BodyPartList bodyPartList;
+    public ushort Id;// { get; private set; }
+    public BodyPartList Avatar;// { get; private set; }
+    public ushort PalavraAtual;// { get; private set; }
+    public ushort QtdTentativas;// { get; private set; }
 }
 
 [System.Serializable]
@@ -59,8 +63,22 @@ public class AvatarManager : MonoBehaviour
     {
         FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(playerData.bodyPartList));
     }
-    PlayerData GetPlayerData()
+    public PlayerData GetPlayerData()
     {
+        if(playerData.username == null)
+        {
+            if (FileManager.FileExists("avatarData.txt"))
+            {
+                playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
+                playerData.username = "FileExists";
+            }
+            else
+            {
+                playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
+                playerData.username = "Usrnm";
+            }
+            Debug.Log("hee-haw");
+        }
         return playerData;
     }
 
