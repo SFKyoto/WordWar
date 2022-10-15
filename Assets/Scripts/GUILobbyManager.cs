@@ -16,15 +16,14 @@ public class GUILobbyManager : MonoBehaviour
 
     private void Start()
     {
-        BTNStartMatch.gameObject.SetActive(isMPlayerModeServer);
-    }
-
-    /// <summary>
-    /// Mostra IP do servidor na tela.
-    /// </summary>
-    public void SetIPTXT()
-    {
-        TXTIpAddress.text = new WebClient().DownloadString("https://api.ipify.org/");
+        if (isMPlayerModeServer)
+        {
+            TXTIpAddress.text = new WebClient().DownloadString("https://api.ipify.org/");
+        }
+        else
+        {
+            TXTIpAddress.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -41,5 +40,7 @@ public class GUILobbyManager : MonoBehaviour
         {
             TXTPlayerData[i].text = players.Length <= i ? "" : (players[i].username);
         }
+        BTNStartMatch.gameObject.SetActive(isMPlayerModeServer && players.Length > 1);
+        //BTNStartMatch.enabled = players.Length > 1;
     }
 }

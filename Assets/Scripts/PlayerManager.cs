@@ -10,8 +10,6 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        FindObjectOfType<GUILobbyManager>().SetIPTXT();
-
         PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
         SpawnPlayer(0, playerData);
         FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
@@ -19,7 +17,7 @@ public class PlayerManager : MonoBehaviour
         //NetworkServerManager.Singleton.Server.ClientDisconnected += new EventHandler(s, e) => RemovePlayerFromList(e.Id);
     }
 
-    private void RemovePlayerFromList(ushort playerId)
+    public void RemovePlayerFromList(ushort playerId)
     {
         playerList.Remove(playerId);
     }
@@ -32,40 +30,22 @@ public class PlayerManager : MonoBehaviour
 
     public static void SpawnPlayer(ushort id, PlayerData playerData)
     {
-        Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);
-        message.AddString(JsonUtility.ToJson(playerData));
-        foreach (PlayerData otherPlayer in playerList.Values)
-            NetworkServerManager.Singleton.Server.Send(message, otherPlayer.Id);
+        if (!playerList.ContainsKey(id))
+        {
+            Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);
+            message.AddString(JsonUtility.ToJson(playerData));
+            foreach (PlayerData otherPlayer in playerList.Values)
+                NetworkServerManager.Singleton.Server.Send(message, otherPlayer.Id);
 
-        playerData.Id = id;
-        playerData.PalavraAtual = 0;
-        playerData.QtdTentativas = 0;
+            playerData.Id = id;
+            playerData.PalavraAtual = 0;
+            playerData.QtdTentativas = 0;
 
-        playerList.Add(id, playerData);
+            playerList.Add(id, playerData);
+        }
     }
 
     #region Messages
-    public static string GetGuessFromPlayer(ushort fromClientId, string attempt)
-    {
-        //if (!playerList.ContainsKey(fromClientId))
-        //    SpawnPlayer(fromClientId, "Player");
-
-        string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].PalavraAtual);
-        Debug.Log($"Tentativa da palavra {playerList[fromClientId].PalavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
-
-        if (checkedAttempt == "X" || checkedAttempt.Contains((char)AttempededLetter.Missed) || checkedAttempt.Contains((char)AttempededLetter.NotInWord))
-        {
-            playerList[fromClientId].QtdTentativas++;
-        }
-        else
-        {
-            Debug.Log($"Player {fromClientId} guessed right");
-            playerList[fromClientId].QtdTentativas = 0;
-            playerList[fromClientId].PalavraAtual++;
-        }
-        return checkedAttempt;
-    }
-
     [MessageHandler((ushort)ClientToServerId.playerDataMsg)]
     private static void GetPlayerData(ushort fromClientId, Message message)
     {
@@ -83,10 +63,28 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public static string GetGuessFromPlayer(ushort fromClientId, string attempt)
+    {
+        string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].PalavraAtual);
+        Debug.Log($"Tentativa da palavra {playerList[fromClientId].PalavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
+
+        if (checkedAttempt == "X" || checkedAttempt.Contains((char)AttempededLetter.Missed) || checkedAttempt.Contains((char)AttempededLetter.NotInWord))
+        {
+            playerList[fromClientId].QtdTentativas++;
+        }
+        else
+        {
+            Debug.Log($"Player {fromClientId} guessed right");
+            playerList[fromClientId].QtdTentativas = 0;
+            playerList[fromClientId].PalavraAtual++;
+        }
+        return checkedAttempt;
+    }
+
     [MessageHandler((ushort)ClientToServerId.wordGuess)]
     private static void GetGuessFromPlayer(ushort fromClientId, Message message)
     {
-        if (FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
+        if (FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted && playerList.ContainsKey(fromClientId))
         {
             string messageStr = message.GetString();
             Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
@@ -112,6 +110,10 @@ public class PlayerManager : MonoBehaviour
                 //    NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
                 //}
             }
+        }
+        else
+        {
+            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
         }
     }
     #endregion
