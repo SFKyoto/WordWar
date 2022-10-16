@@ -21,7 +21,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
 
     private void Start()
     {
-        Debug.Log("multiplayer server started.");
+        Debug.Log("multiplayer server manager started.");
         if (listPossibleAnswers.Count == 0) GetWordLists();
         if (qtdPalavrasJogo <= 0) qtdPalavrasJogo = 2;
         for(int i = 0; i < qtdPalavrasJogo; i++)
@@ -35,15 +35,11 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             else
                 i--;
         }
-        timerStarted = false;
+        timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
-            timeBetweenGuessedWords = 30.0f;
-        //NetworkClientManager.Singleton.SetSocket("127.0.0.1", 1237);
-        //NetworkClientManager.Singleton.StartConn();
+            timeBetweenGuessedWords = 300.0f;
 
-        //networkClientManager = new NetworkClientManager();
-        //networkClientManager.SetSocket("127.0.0.1", 1237);
-        //networkClientManager.StartConn();
+        NetworkServerManager.Singleton.Server.SendToAll(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameStart));
     }
 
     void Update()
@@ -81,7 +77,8 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
 
             Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
             playerStatsMsg.AddString(JsonUtility.ToJson(PlayerManager.playerList));
-            NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
+            if(NetworkServerManager.Singleton.Server.IsRunning)
+                NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
         }
     }
 
