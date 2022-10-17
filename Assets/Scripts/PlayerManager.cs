@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using RiptideNetworking;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -80,9 +79,9 @@ public class PlayerManager : MonoBehaviour
         else
         {
             Debug.Log($"Player {fromClientId} guessed right");
+            playerList[fromClientId].score += Math.Max(0,  1100 - (playerList[fromClientId].qtdTentativas * 100));
             playerList[fromClientId].qtdTentativas = 0;
             playerList[fromClientId].palavraAtual++;
-            playerList[fromClientId].score += playerList[fromClientId].qtdTentativas <= 0 ? (playerList[fromClientId].qtdTentativas > 5 ? 0 : 1000) : 1000 / playerList[fromClientId].qtdTentativas;
         }
         return checkedAttempt;
     }

@@ -21,7 +21,6 @@ public class WordManager : MonoBehaviour
     public string currentGuess = "";
     public List<string> previousWords = new List<string>();
     private int currentScore = 0;
-    //private int triesCount = 0;
     private int currentTries = 0;
     private int successfulGuesses = 0;
     public bool isKeyboardLocked = false;
@@ -228,7 +227,7 @@ public class WordManager : MonoBehaviour
     private void IncreaseScore()
     {
         successfulGuesses++;
-        currentScore += currentTries <= 0 ? (currentTries > 5 ? 0 : 1000) : 1000/currentTries;
+        currentScore += Math.Max(0, 1100 - (currentTries * 100));
         currentTries = 0;
     }
 

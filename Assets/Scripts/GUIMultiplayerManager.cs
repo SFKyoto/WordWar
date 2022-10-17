@@ -1,12 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GUIMultiplayerManager : MonoBehaviour
 {
@@ -23,6 +19,9 @@ public class GUIMultiplayerManager : MonoBehaviour
             TXTPlayerNicks[i].text = TXTPlayerScores[i].text = "";
     }
 
+    /// <summary>
+    /// Exibe popup de desconexão na tela.
+    /// </summary>
     public void DidDisconnect()
     {
         disconnectedPopup.MenuToggle();
