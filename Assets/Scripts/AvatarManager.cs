@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using System;
 
 public class PlayerData
 {
     public string username;
     public BodyPartList bodyPartList;
-    public ushort Id;// { get; private set; }
-    public BodyPartList Avatar;// { get; private set; }
-    public ushort PalavraAtual;// { get; private set; }
-    public ushort QtdTentativas;// { get; private set; }
+    public ushort id;// { get; private set; }
+    public int score;
+    public ushort palavraAtual;// { get; private set; }
+    public ushort qtdTentativas;// { get; private set; }
+    public Boolean active;
 }
 
 [System.Serializable]
@@ -19,7 +21,12 @@ public class BodyPart
 {
     public int bodyPartType; //id do tipo da parte
     public int bodyPartId; //id do sprite
-    public Color bodyPartColor; //cor da parte
+    public MockColor bodyPartColor; //cor da parte
+}
+[System.Serializable]
+public class MockColor
+{
+    public float r, g, b, a;
 }
 
 [System.Serializable]
@@ -92,8 +99,7 @@ public class AvatarManager : MonoBehaviour
                 Debug.Log(sprite);
                 image.sprite = sprite;
                 Debug.Log("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
-                //image.sprite = spriteLists[bodyPart.bodyPartType].sprite[bodyPart.bodyPartId];
-                image.color = bodyPart.bodyPartColor;
+                image.color = new Color(bodyPart.bodyPartColor.r, bodyPart.bodyPartColor.g, bodyPart.bodyPartColor.b, bodyPart.bodyPartColor.a);
             }
         }
     }

@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using RiptideNetworking;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 //using Unity.Netcode;
 
 public class ServerMessageManager : MonoBehaviour
@@ -43,10 +45,11 @@ public class ServerMessageManager : MonoBehaviour
     }
 
     [MessageHandler((ushort)ServerToClientId.playerStats)]
-    private static void NewPlayerJoined(Message message)
+    private static void GetPlayersData(Message message)
     {
         string playersData = message.GetString();
-        FindObjectOfType<PlayerManager>().SetPlayersData(JsonUtility.FromJson<Dictionary<ushort, PlayerData>> (playersData));
+        Debug.Log(playersData);
+        FindObjectOfType<PlayerManager>().SetPlayersData(JsonConvert.DeserializeObject<Dictionary<ushort, PlayerData>> (playersData));
     }
 
     [MessageHandler((ushort)ServerToClientId.youLost)]
@@ -55,6 +58,12 @@ public class ServerMessageManager : MonoBehaviour
         ushort quittingPlayer = message.GetUShort();
         Debug.Log($"Player {quittingPlayer} left the game.");
         //destroy player data
+    }
+
+    [MessageHandler((ushort)ServerToClientId.gameStart)]
+    private static void GameStart(Message message)
+    {
+        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
     }
 
     [MessageHandler((ushort)ServerToClientId.gameOver)]

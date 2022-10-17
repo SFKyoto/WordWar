@@ -29,6 +29,7 @@ public class GUILobbyManager : MonoBehaviour
                 txtPlayerData.text = "";
             //TXTIpAddress.gameObject.SetActive(false);
         }
+        BTNStartMatch.gameObject.SetActive(isMPlayerModeServer);
     }
 
     public void DidDisconnect()
@@ -54,7 +55,6 @@ public class GUILobbyManager : MonoBehaviour
         {
             TXTPlayerData[i].text = players.Length <= i ? "" : (players[i].username);
         }
-        //BTNStartMatch.gameObject.SetActive(isMPlayerModeServer && players.Length > 1);
     }
 
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using RiptideNetworking;
 using System;
+using Newtonsoft.Json;
 
 public class MultiPlayerServerGuessesManager : GameGuessesManager
 {
@@ -53,15 +54,16 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 Debug.Log(PlayerManager.playerList.Count);
                 foreach (KeyValuePair<ushort, PlayerData> player in PlayerManager.playerList)
                 {
-                    Debug.Log($"{player.Value.Id} -> {player.Value.PalavraAtual}");
-                    if(player.Value.PalavraAtual < barrierProgress)
+                    Debug.Log($"{player.Value.id} -> {player.Value.palavraAtual}");
+                    if(player.Value.palavraAtual < barrierProgress)
                     {
-                        Debug.Log($"Should disconnect user {player.Value.Id}");
-                        //disconnect a user, barrier got him
+                        Debug.Log($"Should disconnect user {player.Value.id}");
+                        //game over to user, barrier got him
                         Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
-                        //newMessage.AddUShort(player.Value.Id);
-                        NetworkServerManager.Singleton.Server.Send(playerLostMessage, player.Value.Id);
-                        NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
+                        if(player.Value.id != 0) NetworkServerManager.Singleton.Server.Send(playerLostMessage, player.Value.id);
+                        FindObjectOfType<PlayerManager>().RemovePlayerFromList(player.Value.id);
+                        //NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
+
                         //foreach (KeyValuePair<ushort, PlayerManager> playerToDisconnect in PlayerManager.playerList)
                         //{
                         //    Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
@@ -76,9 +78,8 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             }
 
             Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
-            playerStatsMsg.AddString(JsonUtility.ToJson(PlayerManager.playerList));
-            if(NetworkServerManager.Singleton.Server.IsRunning)
-                NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
+            playerStatsMsg.AddString(JsonConvert.SerializeObject(PlayerManager.playerList));
+            NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
         }
     }
 
@@ -102,30 +103,14 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
     {
         string returnedAttempt = PlayerManager.GetGuessFromPlayer(0, currentGuess);
 
-        if (PlayerManager.playerList[0].PalavraAtual >= qtdPalavrasJogo)
+        if (PlayerManager.playerList[0].palavraAtual >= qtdPalavrasJogo)
         {
             Debug.Log($"GAME OVER - Player 0 won!");
-            Message gameOverMessage2 = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-            gameOverMessage2.AddUShort(0);
-            NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage2);
+            Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+            gameOverMessage.AddUShort(0);
+            NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
             NetworkServerManager.Singleton.Server.Stop();
             //go to result screen
-
-            //foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
-            //{
-            //    if (player.Value.PalavraAtual < barrierProgress)
-            //    {
-            //        //you (player 0) won!
-
-            //        //foreach (KeyValuePair<ushort, PlayerManager> player2 in PlayerManager.playerList)
-            //        //{
-            //        //    Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-            //        //    newMessage.AddUShort(player.Value.Id);
-            //        //    NetworkServerManager.Singleton.Server.Send(newMessage, player2.Value.Id);
-            //        //    NetworkServerManager.Singleton.Server.DisconnectClient(player2.Value.Id);
-            //        //}
-            //    }
-            //}
         }
 
         return returnedAttempt;

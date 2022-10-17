@@ -344,7 +344,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 999894451}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: onMatchStart
+        m_MethodName: onMatchStartServer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2024,6 +2024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IP: 
+  disconnectedPopup: {fileID: 0}
 --- !u!1 &1015358356
 GameObject:
   m_ObjectHideFlags: 0

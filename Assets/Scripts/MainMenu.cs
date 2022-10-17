@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public string IP;
+    public GUIControl disconnectedPopup;
 
     public void onMainMenuPressed()
     {
@@ -59,11 +60,18 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }
 
-    public void onMatchStart()
+    public void onMatchStartClient()
     {
-        if(PlayerPrefs.GetString("multiPlayerMode") == "server")
-            SceneManager.LoadScene("Assets/Scenes/Multi_Server.unity", LoadSceneMode.Single);
-        else
-            SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
+        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
+    }
+
+    public void onMatchStartServer()
+    {
+        SceneManager.LoadScene("Assets/Scenes/Multi_Server.unity", LoadSceneMode.Single);
+    }
+
+    public void onDisconnected()
+    {
+        disconnectedPopup.MenuToggle();
     }
 }

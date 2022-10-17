@@ -9,7 +9,8 @@ public enum ServerToClientId : ushort
     playerStats = 3,
     serverQuitGame = 4,
     youLost = 5,
-    gameOver = 6,
+    gameStart = 6,
+    gameOver = 7,
 }
 
 public enum ClientToServerId : ushort
@@ -128,6 +129,7 @@ public class NetworkClientManager : MonoBehaviour
     private void DidDisconnect(object sender, EventArgs e)
     {
         Debug.Log("Player did disconnect");
-        FindObjectOfType<GUILobbyManager>().DidDisconnect();
+        FindObjectOfType<GUILobbyManager>()?.DidDisconnect();
+        FindObjectOfType<GUIMultiplayerManager>()?.DidDisconnect();
     }
 }

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using RiptideNetworking;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ public class PlayerManager : MonoBehaviour
         if(PlayerPrefs.GetString("multiPlayerMode") == "server"){
             PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
             SpawnPlayer(0, playerData); //0 é o servidor
-            FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+            FindObjectOfType<GUILobbyManager>()?.UpdatePlayers(playerList);
         }
     }
 
@@ -36,16 +37,16 @@ public class PlayerManager : MonoBehaviour
     {
         if (!playerList.ContainsKey(id))
         {
-            Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);
-            message.AddString(JsonUtility.ToJson(playerData));
-            foreach (PlayerData otherPlayer in playerList.Values)
-                NetworkServerManager.Singleton.Server.Send(message, otherPlayer.Id);
-
-            playerData.Id = id;
-            playerData.PalavraAtual = 0;
-            playerData.QtdTentativas = 0;
-
+            playerData.id = id;
+            playerData.palavraAtual = 0;
+            playerData.qtdTentativas = 0;
+            
             playerList.Add(id, playerData);
+            Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);
+            message.AddString(JsonConvert.SerializeObject(playerList));
+            foreach (PlayerData otherPlayer in playerList.Values)
+                if(otherPlayer.id != 0)
+                    NetworkServerManager.Singleton.Server.Send(message, otherPlayer.id);
         }
     }
 
@@ -53,7 +54,7 @@ public class PlayerManager : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.playerDataMsg)]
     private static void GetPlayerData(ushort fromClientId, Message message)
     {
-        if (!FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted) //in lobby
+        if (FindObjectOfType<MultiPlayerServerGuessesManager>() == null || !FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted) //in lobby
         {
             string messageStr = message.GetString();
             Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
@@ -69,18 +70,19 @@ public class PlayerManager : MonoBehaviour
 
     public static string GetGuessFromPlayer(ushort fromClientId, string attempt)
     {
-        string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].PalavraAtual);
-        Debug.Log($"Tentativa da palavra {playerList[fromClientId].PalavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
+        string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].palavraAtual);
+        Debug.Log($"Tentativa da palavra {playerList[fromClientId].palavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
 
         if (checkedAttempt == "X" || checkedAttempt.Contains((char)AttempededLetter.Missed) || checkedAttempt.Contains((char)AttempededLetter.NotInWord))
         {
-            playerList[fromClientId].QtdTentativas++;
+            playerList[fromClientId].qtdTentativas++;
         }
         else
         {
             Debug.Log($"Player {fromClientId} guessed right");
-            playerList[fromClientId].QtdTentativas = 0;
-            playerList[fromClientId].PalavraAtual++;
+            playerList[fromClientId].qtdTentativas = 0;
+            playerList[fromClientId].palavraAtual++;
+            playerList[fromClientId].score += playerList[fromClientId].qtdTentativas <= 0 ? (playerList[fromClientId].qtdTentativas > 5 ? 0 : 1000) : 1000 / playerList[fromClientId].qtdTentativas;
         }
         return checkedAttempt;
     }
@@ -88,31 +90,27 @@ public class PlayerManager : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.wordGuess)]
     private static void GetGuessFromPlayer(ushort fromClientId, Message message)
     {
-        if (FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted && playerList.ContainsKey(fromClientId))
+        if (FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
         {
-            string messageStr = message.GetString();
-            Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
-
-            Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.wordAnswer);
-            newMessage.AddString(GetGuessFromPlayer(fromClientId, messageStr));
-            NetworkServerManager.Singleton.Server.Send(newMessage, fromClientId);
-
-            if (playerList[fromClientId].PalavraAtual >= FindObjectOfType<MultiPlayerServerGuessesManager>().qtdPalavrasJogo)
+            if (playerList.ContainsKey(fromClientId))
             {
-                Debug.Log($"GAME OVER - Player {fromClientId} won!");
-                Message gameOverMessage2 = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                gameOverMessage2.AddUShort(fromClientId);
-                NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage2);
-                NetworkServerManager.Singleton.Server.Stop();
-                //to winning screen
+                string messageStr = message.GetString();
+                Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
 
-                //foreach (KeyValuePair<ushort, PlayerManager> player in PlayerManager.playerList)
-                //{
-                //    Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                //    gameOverMessage.AddUShort(player.Value.Id);
-                //    NetworkServerManager.Singleton.Server.Send(gameOverMessage, 0);
-                //    NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
-                //}
+                Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.wordAnswer);
+                newMessage.AddString(GetGuessFromPlayer(fromClientId, messageStr));
+                NetworkServerManager.Singleton.Server.Send(newMessage, fromClientId);
+
+                if (playerList[fromClientId].palavraAtual >= FindObjectOfType<MultiPlayerServerGuessesManager>().qtdPalavrasJogo)
+                {
+                    Debug.Log($"GAME OVER - Player {fromClientId} won!");
+                    Message gameOverMessage2 = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+                    gameOverMessage2.AddUShort(fromClientId);
+                    NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage2);
+                    NetworkServerManager.Singleton.Server.Stop();
+                    //to winning screen
+
+                }
             }
         }
         else

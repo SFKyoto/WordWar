@@ -16,9 +16,6 @@ public class MultiPlayerGuessesManager : GameGuessesManager
     public override string GetCheckedAttempt(string currentGuess)
     {
         Debug.Log($"Multiplayer message: {currentGuess}");
-        //Debug.Log(networkClientManager);
-        //if (networkClientManager == null) SetConn();
-        //networkClientManager.SendMessage(currentGuess);
 
         Message message = Message.Create(MessageSendMode.reliable, (ushort)ClientToServerId.wordGuess);
         message.AddString(currentGuess);
