@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GUIControl : MonoBehaviour
 {
-
     bool isOpen = false;
 
     public void MenuToggle()
@@ -22,6 +19,7 @@ public class GUIControl : MonoBehaviour
 
     public void onQuit()
     {
+        NetworkClientManager.Singleton?.Client.Disconnect();
         SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
     }
 }

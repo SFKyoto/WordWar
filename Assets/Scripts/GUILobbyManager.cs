@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class GUILobbyManager : MonoBehaviour
 {
-    public TextMeshProUGUI TXTIpAddress;
+    public TextMeshProUGUI TXTServerData;
     public TextMeshProUGUI[] TXTPlayerData = new TextMeshProUGUI[4];
     public Boolean isMPlayerModeServer;
     public Button BTNStartMatch;
@@ -19,11 +19,11 @@ public class GUILobbyManager : MonoBehaviour
         isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
         if (isMPlayerModeServer)
         {
-            TXTIpAddress.text = "Código da sala: " + new WebClient().DownloadString("https://api.ipify.org/");
+            TXTServerData.text = "Código da sala: " + new WebClient().DownloadString("https://api.ipify.org/");
         }
         else
         {
-            TXTIpAddress.text = "Conectando...";
+            TXTServerData.text = "Conectando...";
             foreach (var txtPlayerData in TXTPlayerData)
                 txtPlayerData.text = "";
             //TXTIpAddress.gameObject.SetActive(false);
@@ -33,11 +33,11 @@ public class GUILobbyManager : MonoBehaviour
 
     public void DidDisconnect()
     {
-        TXTIpAddress.text = "Desconectado do servidor.";
+        TXTServerData.text = "Desconectado do servidor.";
     }
     public void FailedToConnect()
     {
-        TXTIpAddress.text = "Erro ao se conectar com o servidor.";
+        TXTServerData.text = "Erro ao se conectar com o servidor.";
     }
 
     /// <summary>

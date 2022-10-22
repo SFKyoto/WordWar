@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
 
     public void onAboutPressed()
     {
-        //vai para os creditos
+        SceneManager.LoadScene("Assets/Scenes/About.unity", LoadSceneMode.Single);
     }
 
     public void onQuitPressed()

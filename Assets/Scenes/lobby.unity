@@ -2899,7 +2899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b41ed82932f1b024aae7d1bd0790ba8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TXTIpAddress: {fileID: 48514916}
+  TXTServerData: {fileID: 48514916}
   TXTPlayerData:
   - {fileID: 558491720}
   - {fileID: 1897662013}
