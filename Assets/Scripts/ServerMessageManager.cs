@@ -55,9 +55,11 @@ public class ServerMessageManager : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.youLost)]
     private static void PlayerLost(Message message)
     {
-        ushort quittingPlayer = message.GetUShort();
-        Debug.Log($"Player {quittingPlayer} left the game.");
-        //destroy player data
+        Debug.Log("Barrier got you!");
+        FindObjectOfType<WordManager>().BecomeObserver();
+
+        //ushort quittingPlayer = message.GetUShort();
+        //Debug.Log($"Player {quittingPlayer} left the game.");
     }
 
     [MessageHandler((ushort)ServerToClientId.gameStart)]
@@ -71,6 +73,7 @@ public class ServerMessageManager : MonoBehaviour
     {
         ushort winningPlayer = message.GetUShort();
         Debug.Log($"GAME OVER - Player {winningPlayer} WON!");
+        FindObjectOfType<WordManager>().BecomeObserver();
         //destroy everyone's data, go back to menu
     }
     #endregion

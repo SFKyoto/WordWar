@@ -43,4 +43,10 @@ public class GUIGuessedWordManager : MonoBehaviour
     {
         letter.color = fontColor;
     }
+
+    public void HideComponent()
+    {
+        letter.color = new Color(0, 0, 0, 0);
+        GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+    }
 }

@@ -173,7 +173,6 @@ public class WordManager : MonoBehaviour
                 {
                     returnedColors[i] = correct;
                 }
-                //allCorrect = allCorrect && (checkedWord[i] != (char)AttempededLetter.Missed && checkedWord[i] != (char)AttempededLetter.NotInWord);
             }
 
             currentTries++;
@@ -184,7 +183,6 @@ public class WordManager : MonoBehaviour
             }
 
             string currentGuessNoAccents = SinglePlayerTextManipulation.RemoveAccents(currentGuess);
-            //guiAnswerManager.CreateAnswerSprites(allCorrect ? checkedWord : currentGuessNoAccents, returnedColors, fontOnWhite);
             guiAnswerManager.CreateAnswerSprites(checkedWordEditable.ToString(), returnedColors, fontOnWhite);
             guiKeyboardManager.PaintKeyboardLetters(currentGuessNoAccents.ToUpper(), returnedColors);
 
@@ -236,5 +234,11 @@ public class WordManager : MonoBehaviour
         TXTScore.text = "Pontos: " + currentScore.ToString();
         TXTTriesCount.text = "Tentativas: " + currentTries.ToString();
         TXTSuccesfullGuesses.text = "Acertos: " + successfulGuesses.ToString();
+    }
+
+    public void BecomeObserver()
+    {
+        isKeyboardLocked = true;
+        guiKeyboardManager.HideKeyboard();
     }
 }

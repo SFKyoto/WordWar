@@ -21,7 +21,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (playerList.ContainsKey(playerId))
         {
-            playerList.Remove(playerId);
+            //playerList.Remove(playerId);
+            playerList[playerId].active = false;
             FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
         }
     }
@@ -39,6 +40,7 @@ public class PlayerManager : MonoBehaviour
             playerData.id = id;
             playerData.palavraAtual = 0;
             playerData.qtdTentativas = 0;
+            playerData.active = true;
             
             playerList.Add(id, playerData);
             Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.playerStats);

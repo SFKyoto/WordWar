@@ -49,4 +49,18 @@ public class GUIKeyboardManager : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Esconde o teclado do jogador.
+    /// </summary>
+    public void HideKeyboard()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child != null)
+            {
+                child.GetComponent<GUIGuessedWordManager>().HideComponent();
+            }
+        }
+    }
 }

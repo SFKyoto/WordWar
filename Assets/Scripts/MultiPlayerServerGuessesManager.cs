@@ -5,6 +5,7 @@ using System.IO;
 using RiptideNetworking;
 using System;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class MultiPlayerServerGuessesManager : GameGuessesManager
 {
@@ -50,30 +51,54 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             timeLeftBetweenWords -= Time.deltaTime;
             if (timeLeftBetweenWords <= 0)
             {
-                barrierProgress++;
-                Debug.Log(PlayerManager.playerList.Count);
-                foreach (KeyValuePair<ushort, PlayerData> player in PlayerManager.playerList)
-                {
-                    Debug.Log($"{player.Value.id} -> {player.Value.palavraAtual}");
-                    if(player.Value.palavraAtual < barrierProgress)
-                    {
-                        Debug.Log($"Should disconnect user {player.Value.id}");
-                        //game over to user, barrier got him
-                        Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
-                        if(player.Value.id != 0) NetworkServerManager.Singleton.Server.Send(playerLostMessage, player.Value.id);
-                        FindObjectOfType<PlayerManager>().RemovePlayerFromList(player.Value.id);
-                        //NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
+                barrierProgress++; //n necessario agora 
 
-                        //foreach (KeyValuePair<ushort, PlayerManager> playerToDisconnect in PlayerManager.playerList)
-                        //{
-                        //    Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
-                        //    newMessage.AddUShort(player.Value.Id);
-                        //    NetworkServerManager.Singleton.Server.Send(newMessage, playerToDisconnect.Value.Id);
-                        //    NetworkServerManager.Singleton.Server.DisconnectClient(playerToDisconnect.Value.Id);
-                        //}
-                        //PlayerManager.playerList.Remove(player.Key);
-                    }
+                var activePlayers = PlayerManager.playerList.Where(player => player.Value.active);
+                var playerToDisconnect = activePlayers
+                    .OrderBy(player => player.Value.score)
+                    .ThenByDescending(player => player.Value.palavraAtual)
+                    .ThenByDescending(player => player.Value.qtdTentativas)
+                    .First();
+                Debug.Log($"Should disconnect user {playerToDisconnect.Key}");
+
+                if(playerToDisconnect.Value.id != 0)
+                {
+                    Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
+                    NetworkServerManager.Singleton.Server.Send(playerLostMessage, playerToDisconnect.Value.id);
                 }
+                else
+                {
+                    FindObjectOfType<WordManager>().BecomeObserver();
+                }
+                FindObjectOfType<PlayerManager>().RemovePlayerFromList(playerToDisconnect.Value.id);
+
+                //foreach (KeyValuePair<ushort, PlayerData> player in PlayerManager.playerList)
+                //{
+                //    if (player.Value.active)
+                //    {
+                //        Debug.Log($"{player.Value.id} -> {player.Value.score}");
+
+                //    }
+                //    Debug.Log($"{player.Value.id} -> {player.Value.palavraAtual}");
+                //    if(player.Value.palavraAtual < barrierProgress)
+                //    {
+                //        Debug.Log($"Should disconnect user {player.Value.id}");
+                //        //game over to user, barrier got him
+                //        Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
+                //        if(player.Value.id != 0) NetworkServerManager.Singleton.Server.Send(playerLostMessage, player.Value.id);
+                //        FindObjectOfType<PlayerManager>().RemovePlayerFromList(player.Value.id);
+                //        //NetworkServerManager.Singleton.Server.DisconnectClient(player.Value.Id);
+
+                //        //foreach (KeyValuePair<ushort, PlayerManager> playerToDisconnect in PlayerManager.playerList)
+                //        //{
+                //        //    Message newMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
+                //        //    newMessage.AddUShort(player.Value.Id);
+                //        //    NetworkServerManager.Singleton.Server.Send(newMessage, playerToDisconnect.Value.Id);
+                //        //    NetworkServerManager.Singleton.Server.DisconnectClient(playerToDisconnect.Value.Id);
+                //        //}
+                //        //PlayerManager.playerList.Remove(player.Key);
+                //    }
+                //}
                 timeLeftBetweenWords = timeBetweenGuessedWords;
             }
 

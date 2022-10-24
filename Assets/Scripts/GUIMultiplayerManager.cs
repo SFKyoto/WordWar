@@ -8,6 +8,7 @@ public class GUIMultiplayerManager : MonoBehaviour
 {
     public Text[] TXTPlayerNicks;
     public Text[] TXTPlayerScores;
+    public AvatarManager[] Avatars;
     public GUIControl disconnectedPopup;
     public Boolean isMPlayerModeServer;
 
@@ -41,6 +42,7 @@ public class GUIMultiplayerManager : MonoBehaviour
         {
             TXTPlayerNicks[i].text = players.Length <= i ? "" : (players[i].username);
             TXTPlayerScores[i].text = players.Length <= i ? "" : (players[i].score + " pts");
+            Avatars[i].AvatarUpdate();
         }
     }
 

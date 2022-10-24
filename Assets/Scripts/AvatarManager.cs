@@ -37,6 +37,7 @@ public class BodyPartList
 
 public class AvatarManager : MonoBehaviour
 {
+    public Boolean isPlayerAvatar;
     public TextAsset defaultAvatar;
 
     public PlayerData playerData = new PlayerData();
@@ -47,23 +48,20 @@ public class AvatarManager : MonoBehaviour
 
     void Start()
     {
-        if (FileManager.FileExists("avatarData.txt"))
+        if (isPlayerAvatar)
         {
-            playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
-            playerData.username = "FileExists";
+            if (FileManager.FileExists("avatarData.txt"))
+            {
+                playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
+                playerData.username = "FileExists";
+            }
+            else
+            {
+                playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
+                playerData.username = "Usrnm";
+            }
+            AvatarUpdate();
         }
-        else
-        {
-            playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
-            playerData.username = "Usrnm";
-        }
-        AvatarUpdate();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // AvatarUpdate();
     }
 
     void SavePlayerData()
@@ -87,8 +85,16 @@ public class AvatarManager : MonoBehaviour
         }
         return playerData;
     }
+    public void SetPlayerData(PlayerData playerData)
+    {
+        if (playerData != null)
+        {
+            this.playerData = playerData;
+            AvatarUpdate();
+        }
+    }
 
-    void AvatarUpdate()
+    public void AvatarUpdate()
     {
         if(parts.Length > 0)
         {
@@ -102,5 +108,10 @@ public class AvatarManager : MonoBehaviour
                 image.color = new Color(bodyPart.bodyPartColor.r, bodyPart.bodyPartColor.g, bodyPart.bodyPartColor.b, bodyPart.bodyPartColor.a);
             }
         }
+    }
+
+    public void ClearAvatar()
+    {
+        parts[bodyPart.bodyPartType].GetComponent<Image>().sprite = null;
     }
 }
