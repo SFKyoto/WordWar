@@ -112,6 +112,6 @@ public class AvatarManager : MonoBehaviour
 
     public void ClearAvatar()
     {
-        parts[bodyPart.bodyPartType].GetComponent<Image>().sprite = null;
+        //parts[bodyPart.bodyPartType].GetComponent<Image>().sprite = null;
     }
 }
