@@ -20,7 +20,7 @@ public class GUILobbyManager : MonoBehaviour
         isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
         if (isMPlayerModeServer)
         {
-            TXTServerData.text = "Código da sala: " + new WebClient().DownloadString("https://api.ipify.org/");
+            TXTServerData.text = "Código da sala:\n" + new WebClient().DownloadString("https://api.ipify.org/");
         }
         else
         {
