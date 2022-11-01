@@ -51,6 +51,7 @@ public class NetworkServerManager : MonoBehaviour
 
             Server = new Server();
             Server.Start(port, maxClientCount);
+            Server.ClientConnected += PlayerConnected;
             Server.ClientDisconnected += PlayerLeft;
         }
         else Destroy(this);
@@ -68,6 +69,11 @@ public class NetworkServerManager : MonoBehaviour
             Debug.Log("Quitting server...");
             Server.Stop();
         }
+    }
+
+    private void PlayerConnected(object sender, ServerClientConnectedEventArgs e)
+    {
+        Debug.Log("A player jooined");
     }
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)

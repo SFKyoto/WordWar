@@ -53,9 +53,10 @@ public class GUILobbyManager : MonoBehaviour
 
         for (int i = 0; i < TXTPlayerData.Length; i++)
         {
+            Debug.Log(i);
             TXTPlayerData[i].text = players.Length <= i ? "" : (players[i].username);
             if (players.Length > i) Avatars[i].SetPlayerData(players[i]);
-            //else Avatars[i].SetPlayerData(null);
+            else Avatars[i].ClearAvatar();
         }
     }
 

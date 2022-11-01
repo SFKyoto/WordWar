@@ -22,6 +22,7 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerSelectionPressed()
     {
+        NetworkClientManager.Singleton.Client?.Disconnect();
         SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
     }
     

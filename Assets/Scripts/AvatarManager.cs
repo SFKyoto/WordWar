@@ -112,6 +112,15 @@ public class AvatarManager : MonoBehaviour
 
     public void ClearAvatar()
     {
+        Debug.Log("clear avatar");
+        //Debug.Log(playerData.bodyPartList.bodyParts);
+        if (parts.Length > 0)
+        {
+            foreach(GameObject part in parts)
+            {
+                part.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+            }
+        }
         //parts[bodyPart.bodyPartType].GetComponent<Image>().sprite = null;
     }
 }
