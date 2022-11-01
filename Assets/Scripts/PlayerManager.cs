@@ -3,6 +3,7 @@ using RiptideNetworking;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        if(PlayerPrefs.GetString("multiPlayerMode") == "server"){
+        if(SceneManager.GetActiveScene().name == "lobby" && PlayerPrefs.GetString("multiPlayerMode") == "server"){
             PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
             SpawnPlayer(0, playerData); //0 é o servidor
             FindObjectOfType<GUILobbyManager>()?.UpdatePlayers(playerList);
@@ -21,8 +22,10 @@ public class PlayerManager : MonoBehaviour
     {
         if (playerList.ContainsKey(playerId))
         {
-            //playerList.Remove(playerId);
-            playerList[playerId].active = false;
+            if(SceneManager.GetActiveScene().name == "lobby")
+                playerList.Remove(playerId);
+            else
+                playerList[playerId].active = false;
             FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
         }
     }

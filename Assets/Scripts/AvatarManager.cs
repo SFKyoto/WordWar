@@ -74,8 +74,9 @@ public class AvatarManager : MonoBehaviour
         {
             if (FileManager.FileExists("avatarData.txt"))
             {
-                playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
-                playerData.username = "FileExists";
+                PlayerData tempData = JsonUtility.FromJson<PlayerData>(FileManager.ReadFile("avatarData.txt"));
+                playerData.username = tempData.username == null ? "FileExists" : tempData.username;
+                playerData.bodyPartList = tempData.bodyPartList;
             }
             else
             {
@@ -100,6 +101,7 @@ public class AvatarManager : MonoBehaviour
         {
             foreach (BodyPart bodyPart in playerData.bodyPartList.bodyParts)
             {
+                parts[bodyPart.bodyPartType].SetActive(true);
                 Image image = parts[bodyPart.bodyPartType].GetComponent<Image>();
                 Sprite sprite = Resources.Load<Sprite>("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
                 Debug.Log(sprite);
@@ -113,12 +115,11 @@ public class AvatarManager : MonoBehaviour
     public void ClearAvatar()
     {
         Debug.Log("clear avatar");
-        //Debug.Log(playerData.bodyPartList.bodyParts);
         if (parts.Length > 0)
         {
             foreach(GameObject part in parts)
             {
-                part.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                part.SetActive(false);
             }
         }
         //parts[bodyPart.bodyPartType].GetComponent<Image>().sprite = null;

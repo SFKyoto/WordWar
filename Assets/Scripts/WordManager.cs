@@ -238,6 +238,7 @@ public class WordManager : MonoBehaviour
 
     public void BecomeObserver()
     {
+        Debug.Log("Virou observador");
         isKeyboardLocked = true;
         guiKeyboardManager.HideKeyboard();
     }
