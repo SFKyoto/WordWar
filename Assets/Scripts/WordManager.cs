@@ -241,5 +241,6 @@ public class WordManager : MonoBehaviour
         Debug.Log("Virou observador");
         isKeyboardLocked = true;
         guiKeyboardManager.HideKeyboard();
+        FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.enabled = false;
     }
 }

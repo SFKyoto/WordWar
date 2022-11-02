@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using RiptideNetworking;
 using System;
 using Newtonsoft.Json;
@@ -40,15 +38,20 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
             timeBetweenGuessedWords = 300.0f;
+        timeLeftBetweenWords = timeBetweenGuessedWords;
 
         NetworkServerManager.Singleton.Server.SendToAll(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameStart));
+        FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(PlayerManager.playerList);
+        barrierProgress = 1;
     }
 
     void Update()
     {
         if (timerStarted)
         {
+            //Debug.Log("time: " + timeLeftBetweenWords.ToString());
             timeLeftBetweenWords -= Time.deltaTime;
+            //Debug.Log("time: " + timeLeftBetweenWords.ToString());
             if (timeLeftBetweenWords <= 0)
             {
                 barrierProgress++; //n necessario agora 
@@ -69,12 +72,12 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 else
                 {
                     FindObjectOfType<WordManager>().BecomeObserver();
+                    FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.enabled = false;
                 }
                 FindObjectOfType<PlayerManager>().RemovePlayerFromList(playerToDisconnect.Value.id);
 
-                
                 //atualmente não há como dar empate
-                if(activePlayers.Count() == 1)
+                if (activePlayers.Count() == 1)
                 {
                     Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
                     NetworkServerManager.Singleton.Server.SendToAll(playerLostMessage);
@@ -85,9 +88,15 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 timeLeftBetweenWords = timeBetweenGuessedWords;
             }
 
+            FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.value = timeLeftBetweenWords / timeBetweenGuessedWords;
             Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
             playerStatsMsg.AddString(JsonConvert.SerializeObject(PlayerManager.playerList));
+            Debug.Log(NetworkServerManager.Singleton.Server);
             NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
+            
+            //para message() depois
+            FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(PlayerManager.playerList);
+            FindObjectOfType<GUIMultiplayerManager>().TXTCurrentRound.text = "Rodada: " + barrierProgress.ToString();
         }
     }
 

@@ -52,8 +52,9 @@ public class AvatarManager : MonoBehaviour
         {
             if (FileManager.FileExists("avatarData.txt"))
             {
-                playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(FileManager.ReadFile("avatarData.txt"));
-                playerData.username = "FileExists";
+                PlayerData tempData = JsonUtility.FromJson<PlayerData>(FileManager.ReadFile("avatarData.txt"));
+                playerData.username = tempData.username == null ? "FileExists" : tempData.username;
+                playerData.bodyPartList = tempData.bodyPartList;
             }
             else
             {

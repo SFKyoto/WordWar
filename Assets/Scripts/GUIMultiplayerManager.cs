@@ -10,6 +10,8 @@ public class GUIMultiplayerManager : MonoBehaviour
     public Text[] TXTPlayerScores;
     public AvatarManager[] Avatars;
     public GUIControl disconnectedPopup;
+    public Slider SLDTempoRestante;
+    public Text TXTCurrentRound;
     public Boolean isMPlayerModeServer;
 
     private void Start()
@@ -42,7 +44,8 @@ public class GUIMultiplayerManager : MonoBehaviour
         {
             TXTPlayerNicks[i].text = players.Length <= i ? "" : (players[i].username);
             TXTPlayerScores[i].text = players.Length <= i ? "" : (players[i].score + " pts");
-            Avatars[i].AvatarUpdate();
+            if (players.Length > i) Avatars[i].SetPlayerData(players[i]);
+            else Avatars[i].ClearAvatar();
         }
     }
 

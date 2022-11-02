@@ -23,10 +23,15 @@ public class PlayerManager : MonoBehaviour
         if (playerList.ContainsKey(playerId))
         {
             if(SceneManager.GetActiveScene().name == "lobby")
+            {
                 playerList.Remove(playerId);
+                FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+            }
             else
+            {
                 playerList[playerId].active = false;
-            FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+                FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(playerList);
+            }
         }
     }
 
