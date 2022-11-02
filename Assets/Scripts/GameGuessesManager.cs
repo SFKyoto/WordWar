@@ -16,8 +16,8 @@ public abstract class GameGuessesManager : MonoBehaviour
     protected List<string> listAllowedGuessesNoAccents = new List<string>();
 
     [Header("Round State")]
-    protected string answerOfTurn;
-    protected string answerOfTurnNoAccents;
+    public string answerOfTurn;
+    public string answerOfTurnNoAccents;
 
     /// <summary>
     /// Obtém as listas de tentativas e repostas possíveis de arquivos incluídos com o jogo.

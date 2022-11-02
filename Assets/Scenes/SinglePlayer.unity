@@ -1059,6 +1059,7 @@ MonoBehaviour:
   TXTSuccesfullGuesses: {fileID: 213832945}
   currentGuess: 
   previousWords: []
+  isKeyboardLocked: 0
   defaultColor: {r: 0.22352941, g: 0.20784314, b: 0.2509804, a: 1}
   correct: {r: 0.4627451, g: 1, b: 0.36862746, a: 1}
   miss: {r: 0.36862746, g: 0.92156863, b: 1, a: 1}
@@ -1077,9 +1078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listPossibleAnswers: []
-  listAllowedGuesses: []
-  answerOfTurn: cobra
+  answerOfTurn: 
   answerOfTurnNoAccents: 
 --- !u!1 &500407705
 GameObject:
@@ -1109,8 +1108,8 @@ RectTransform:
   m_GameObject: {fileID: 500407705}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1593115149}
   m_Father: {fileID: 1519187768}
@@ -1708,8 +1707,8 @@ RectTransform:
   m_GameObject: {fileID: 740255194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 23423675}
   m_Father: {fileID: 1519187768}
@@ -3189,7 +3188,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sair para o Menu
+  m_text: Sair
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3295,9 +3294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listPossibleAnswers: []
-  listAllowedGuesses: []
-  answerOfTurn: cobra
+  answerOfTurn: 
   answerOfTurnNoAccents: 
 --- !u!4 &1635114006
 Transform:
