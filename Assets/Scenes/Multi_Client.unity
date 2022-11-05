@@ -1438,6 +1438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 656578200}
   - {fileID: 1377851719}
@@ -1503,6 +1504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 2054332098}
   - {fileID: 1112060659}
@@ -1587,6 +1589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  answerOfTurn: 
+  answerOfTurnNoAccents: 
 --- !u!1 &500407705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1615,8 +1619,8 @@ RectTransform:
   m_GameObject: {fileID: 500407705}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1593115149}
   m_Father: {fileID: 1519187768}
@@ -2304,6 +2308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 41154221}
   - {fileID: 514381032}
@@ -2809,8 +2814,8 @@ RectTransform:
   m_GameObject: {fileID: 740255194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 23423675}
   m_Father: {fileID: 1519187768}
@@ -3492,6 +3497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 649618310}
   - {fileID: 883303509}
@@ -5357,7 +5363,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sair para o Menu
+  m_text: Sair
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5528,6 +5534,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679e3f1453f30244096fbcda675c5524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  answerOfTurn: 
+  answerOfTurnNoAccents: 
 --- !u!114 &1635114008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5556,6 +5564,8 @@ MonoBehaviour:
   - {fileID: 976242256}
   - {fileID: 375430540}
   disconnectedPopup: {fileID: 1734354383}
+  SLDTempoRestante: {fileID: 0}
+  TXTCurrentRound: {fileID: 0}
   isMPlayerModeServer: 0
 --- !u!114 &1635114009
 MonoBehaviour:

@@ -737,7 +737,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sair para o Menu
+  m_text: Sair
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1184,7 +1184,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!1 &348143651
 GameObject:
@@ -1290,8 +1290,8 @@ RectTransform:
   m_GameObject: {fileID: 362735808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 213400669}
   m_Father: {fileID: 1905435269}
@@ -1949,6 +1949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 1290682893}
   - {fileID: 822503692}
@@ -2130,6 +2131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 1580375727}
   - {fileID: 964366956}
@@ -2477,6 +2479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 381339469}
   - {fileID: 618330031}
@@ -2599,7 +2602,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &934531319
 RectTransform:
@@ -3075,8 +3078,8 @@ RectTransform:
   m_GameObject: {fileID: 1015358356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 856555115}
   m_Father: {fileID: 1905435269}
@@ -3781,6 +3784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 2028881636}
   - {fileID: 1715233482}
@@ -3917,6 +3921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 52389038}
   - {fileID: 1574475072}
@@ -4609,6 +4614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts: []
 --- !u!1 &1897662011
 GameObject:

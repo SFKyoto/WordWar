@@ -939,6 +939,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 1
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 1580375727}
   - {fileID: 964366956}
@@ -1231,7 +1232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &934531316
 MonoBehaviour:
   m_ObjectHideFlags: 0

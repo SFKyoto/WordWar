@@ -1724,6 +1724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 1
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 2529305}
   - {fileID: 1125164646}
@@ -1850,6 +1851,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  answerOfTurn: 
+  answerOfTurnNoAccents: 
 --- !u!1 &500407705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1878,8 +1881,8 @@ RectTransform:
   m_GameObject: {fileID: 500407705}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1593115149}
   m_Father: {fileID: 1519187768}
@@ -2877,8 +2880,8 @@ RectTransform:
   m_GameObject: {fileID: 740255194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 23423675}
   m_Father: {fileID: 1519187768}
@@ -3158,6 +3161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 265633822}
   - {fileID: 2052581534}
@@ -4486,6 +4490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 572222066}
   - {fileID: 837648740}
@@ -5301,7 +5306,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sair para o Menu
+  m_text: Sair
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5546,6 +5551,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb51e738d0b522d46be572851bce8a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  answerOfTurn: 
+  answerOfTurnNoAccents: 
   qtdPalavrasJogo: 0
   palavrasDoJogo: []
   timeBetweenGuessedWords: 0
@@ -5619,6 +5626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 1002184367}
   - {fileID: 198979384}
@@ -5679,6 +5687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerAvatar: 0
   defaultAvatar: {fileID: 4900000, guid: f1b0c1ed374ea354ead81115661ce0da, type: 3}
+  TMPIPTUsername: {fileID: 0}
   parts:
   - {fileID: 950708478}
   - {fileID: 624646907}

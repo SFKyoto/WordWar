@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using System;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerData
 {
@@ -39,6 +41,38 @@ public class AvatarManager : MonoBehaviour
 {
     public Boolean isPlayerAvatar;
     public TextAsset defaultAvatar;
+    public TMP_InputField TMPIPTUsername;
+
+    public static readonly string[][] defaultAvatarParts =
+    {
+        new string[] { "2/1", "#1F1D1C" },
+        new string[] { "2/0", "#1F1D1C" },
+        new string[] { "2/2", "#1F1D1C" },
+        new string[] { "2/1", "#B2592D" },
+        new string[] { "2/0", "#B2592D" },
+        new string[] { "2/2", "#B2592D" },
+        new string[] { "2/1", "#DFE20A" },
+        new string[] { "2/0", "#DFE20A" },
+        new string[] { "2/2", "#DFE20A" },
+        new string[] { "2/1", "#FF2314" },
+        new string[] { "2/0", "#FF2314" },
+        new string[] { "2/2", "#FF2314" },
+        new string[] { "2/1", "#2FFF48" },
+        new string[] { "2/0", "#2FFF48" },
+        new string[] { "2/2", "#2FFF48" },
+        new string[] { "2/1", "#2FC9FF" },
+        new string[] { "2/0", "#2FC9FF" },
+        new string[] { "2/2", "#2FC9FF" },
+        new string[] { "0/0", "#DDD974" },
+        new string[] { "0/0", "#CC865A" },
+        new string[] { "0/0", "#663414" },
+        new string[] { "1/0", "#000000" },
+        new string[] { "1/1", "#000000" },
+        new string[] { "1/2", "#000000" },
+        new string[] { "3/0", "#000000" },
+        new string[] { "3/1", "#000000" },
+        new string[] { "3/2", "#000000" },
+    };
 
     public PlayerData playerData = new PlayerData();
     //public BodyPartList bodyPartList = new BodyPartList();
@@ -62,13 +96,20 @@ public class AvatarManager : MonoBehaviour
                 playerData.username = "Usrnm";
             }
             AvatarUpdate();
+            try { TMPIPTUsername.text = playerData.username; }
+            catch { }
         }
     }
 
-    void SavePlayerData()
+    public void SavePlayerData()
     {
-        FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(playerData.bodyPartList));
+        PlayerData tempData = new PlayerData();
+        tempData.username = TMPIPTUsername.text != "" ? TMPIPTUsername.text : playerData.username;
+        tempData.bodyPartList = playerData.bodyPartList;
+        FileManager.WriteFile("avatarData.txt", JsonUtility.ToJson(tempData));
+        SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
     }
+
     public PlayerData GetPlayerData()
     {
         if(playerData.username == null)
@@ -111,6 +152,20 @@ public class AvatarManager : MonoBehaviour
                 image.color = new Color(bodyPart.bodyPartColor.r, bodyPart.bodyPartColor.g, bodyPart.bodyPartColor.b, bodyPart.bodyPartColor.a);
             }
         }
+    }
+
+    public void SetBodyPart(int bodyPartArray)
+    {
+        int bodyPartWantedType = Int32.Parse(defaultAvatarParts[bodyPartArray][0][0] + "");
+        int bodyPartWantedNumber = Int32.Parse(defaultAvatarParts[bodyPartArray][0][2] + "");
+        playerData.bodyPartList.bodyParts[bodyPartWantedType].bodyPartId = bodyPartWantedNumber;
+        UnityEngine.Color tempColor;
+        ColorUtility.TryParseHtmlString(defaultAvatarParts[bodyPartArray][1], out tempColor);
+        playerData.bodyPartList.bodyParts[bodyPartWantedType].bodyPartColor.r = tempColor.r;
+        playerData.bodyPartList.bodyParts[bodyPartWantedType].bodyPartColor.g = tempColor.g;
+        playerData.bodyPartList.bodyParts[bodyPartWantedType].bodyPartColor.b = tempColor.b;
+        AvatarUpdate();
+        Debug.Log(bodyPartArray);
     }
 
     public void ClearAvatar()
