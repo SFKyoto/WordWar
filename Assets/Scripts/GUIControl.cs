@@ -19,7 +19,8 @@ public class GUIControl : MonoBehaviour
 
     public void onQuit()
     {
-        NetworkClientManager.Singleton?.Client.Disconnect();
+        try { NetworkClientManager.Singleton?.Client.Disconnect(); }
+        catch { }
         SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
     }
 }

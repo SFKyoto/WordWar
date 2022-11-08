@@ -70,7 +70,7 @@ public class NetworkClientManager : MonoBehaviour
             {
                 Client.Send(message);
             }
-            catch(Exception e)
+            catch
             {
                 FindObjectOfType<GUILobbyManager>().FailedToConnect();
             }
