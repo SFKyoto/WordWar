@@ -93,7 +93,7 @@ public class AvatarManager : MonoBehaviour
             else
             {
                 playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
-                playerData.username = "Usrnm";
+                playerData.username = "Jogador";
             }
             AvatarUpdate();
             try { TMPIPTUsername.text = playerData.username; }
@@ -123,7 +123,7 @@ public class AvatarManager : MonoBehaviour
             else
             {
                 playerData.bodyPartList = JsonUtility.FromJson<BodyPartList>(defaultAvatar.text);
-                playerData.username = "Usrnm";
+                playerData.username = "Jogador";
             }
         }
         return playerData;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,9 +14,9 @@ public class WordManager : MonoBehaviour
     public GUIControl guiControl;
 
     [Header("Text Labels")]
-    public Text TXTScore;
-    public Text TXTTriesCount;
-    public Text TXTSuccesfullGuesses;
+    public TextMeshProUGUI TXTScore;
+    public TextMeshProUGUI TXTTriesCount;
+    public TextMeshProUGUI TXTSuccesfullGuesses;
 
     [Header("Round State")]
     public string currentGuess = "";

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ public class GUIMultiplayerManager : MonoBehaviour
     public AvatarManager[] Avatars;
     public GUIControl disconnectedPopup;
     public Slider SLDTempoRestante;
-    public Text TXTCurrentRound;
+    public TextMeshProUGUI TXTCurrentRound;
     public Boolean isMPlayerModeServer;
 
     private void Start()
