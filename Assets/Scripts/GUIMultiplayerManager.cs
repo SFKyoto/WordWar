@@ -15,6 +15,11 @@ public class GUIMultiplayerManager : MonoBehaviour
     public TextMeshProUGUI TXTCurrentRound;
     public Boolean isMPlayerModeServer;
 
+    public GUIControl guiWinningScreenControl;
+    public TextMeshProUGUI TXTWinningPlayerNick;
+    public TextMeshProUGUI TXTWinningPlayerScore;
+    public AvatarManager WinningPlayerAvatar;
+
     private void Start()
     {
         isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
@@ -50,4 +55,14 @@ public class GUIMultiplayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Exibe o popup de jogador vencedor.
+    /// </summary>
+    public void ShowWinningPlayer(PlayerData playerData)
+    {
+        guiWinningScreenControl.MenuToggle();
+        TXTWinningPlayerNick.text = playerData.username;
+        TXTWinningPlayerScore.text = playerData.score + " pts";
+        WinningPlayerAvatar.SetPlayerData(playerData);
+    }
 }

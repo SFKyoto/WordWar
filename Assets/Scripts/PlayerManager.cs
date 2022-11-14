@@ -41,6 +41,13 @@ public class PlayerManager : MonoBehaviour
         FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
     }
 
+    public void ShowWinningPlayer(ushort winningPlayer)
+    {
+        FindObjectOfType<WordManager>().BecomeObserver();
+        FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false;
+        FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(playerList[winningPlayer]);
+    }
+
     public static void SpawnPlayer(ushort id, PlayerData playerData)
     {
         if (!playerList.ContainsKey(id))
@@ -101,7 +108,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
         {
-            if (playerList.ContainsKey(fromClientId))
+            if (playerList.ContainsKey(fromClientId) && playerList[fromClientId].active)
             {
                 string messageStr = message.GetString();
                 Debug.Log($"Mensagem do cliente {fromClientId}: {messageStr}");
@@ -117,8 +124,11 @@ public class PlayerManager : MonoBehaviour
                     gameOverMessage2.AddUShort(fromClientId);
                     NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage2);
                     NetworkServerManager.Singleton.Server.Stop();
-                    //to winning screen
 
+                    //to winning screen
+                    FindObjectOfType<WordManager>().BecomeObserver();
+                    FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false;
+                    FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(playerList[fromClientId]);
                 }
             }
         }

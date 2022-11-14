@@ -4,6 +4,8 @@ using RiptideNetworking;
 using System;
 using Newtonsoft.Json;
 using System.Linq;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class MultiPlayerServerGuessesManager : GameGuessesManager
 {
@@ -37,7 +39,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         }
         timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
-            timeBetweenGuessedWords = 300.0f;
+            timeBetweenGuessedWords = 10.0f;
         timeLeftBetweenWords = timeBetweenGuessedWords;
 
         NetworkServerManager.Singleton.Server.SendToAll(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameStart));
@@ -57,6 +59,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 barrierProgress++; //n necessario agora 
 
                 var activePlayers = PlayerManager.playerList.Where(player => player.Value.active);
+                Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
                 var playerToDisconnect = activePlayers
                     .OrderBy(player => player.Value.score)
                     .ThenByDescending(player => player.Value.palavraAtual)
@@ -77,12 +80,18 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 FindObjectOfType<PlayerManager>().RemovePlayerFromList(playerToDisconnect.Value.id);
 
                 //atualmente não há como dar empate
-                if (activePlayers.Count() == 1)
+                Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
+                if (activePlayers.Count() <= 1)
                 {
                     Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
                     NetworkServerManager.Singleton.Server.SendToAll(playerLostMessage);
                     NetworkServerManager.Singleton.Server.Stop();
+
                     //para tela de vitória
+                    timerStarted = false;
+                    FindObjectOfType<WordManager>().BecomeObserver();
+                    PlayerData winningPlayer = activePlayers.Count() <= 0 ? playerToDisconnect.Value : activePlayers.First().Value;
+                    FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
                 }
 
                 timeLeftBetweenWords = timeBetweenGuessedWords;

@@ -1291,7 +1291,7 @@ MonoBehaviour:
   guiIndicatorManager: {fileID: 927720116}
   wordsManager: {fileID: 1635114005}
   guiKeyboardManager: {fileID: 2052745585}
-  guiControl: {fileID: 0}
+  guiOptionsControl: {fileID: 0}
   TXTScore: {fileID: 728127021}
   TXTTriesCount: {fileID: 1349738986}
   TXTSuccesfullGuesses: {fileID: 10561335}
@@ -4512,7 +4512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052745583}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.9800001, z: -0.000015258789}
+  m_LocalPosition: {x: 0, y: -1.9800001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

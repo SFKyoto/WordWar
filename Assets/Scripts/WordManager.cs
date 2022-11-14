@@ -11,7 +11,7 @@ public class WordManager : MonoBehaviour
     public GUIIndicatorManager guiIndicatorManager;
     public GameGuessesManager wordsManager;
     public GUIKeyboardManager guiKeyboardManager;
-    public GUIControl guiControl;
+    public GUIControl guiOptionsControl;
 
     [Header("Text Labels")]
     public TextMeshProUGUI TXTScore;
@@ -61,7 +61,7 @@ public class WordManager : MonoBehaviour
         {
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
-                guiControl.MenuToggle();
+                guiOptionsControl.MenuToggle();
                 return;
 			}
             foreach (char letter in Input.inputString.ToLower())

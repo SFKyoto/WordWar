@@ -129,7 +129,15 @@ public class NetworkClientManager : MonoBehaviour
     private void DidDisconnect(object sender, EventArgs e)
     {
         Debug.Log("Player did disconnect");
-        FindObjectOfType<GUILobbyManager>()?.DidDisconnect();
-        FindObjectOfType<GUIMultiplayerManager>()?.DidDisconnect();
+        try
+        {
+            FindObjectOfType<GUILobbyManager>()?.DidDisconnect();
+        }
+        catch { }
+        try
+        {
+            FindObjectOfType<GUIMultiplayerManager>()?.DidDisconnect();
+        }
+        catch { }
     }
 }

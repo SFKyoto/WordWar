@@ -21,6 +21,17 @@ public class GUIControl : MonoBehaviour
     {
         try { NetworkClientManager.Singleton?.Client.Disconnect(); }
         catch { }
+        try { NetworkServerManager.Singleton?.Server.Stop(); }
+        catch { }
         SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
+    }
+
+    public void onMultiplayerMenu()
+    {
+        try { NetworkClientManager.Singleton?.Client.Disconnect(); }
+        catch { }
+        try { NetworkServerManager.Singleton?.Server.Stop(); }
+        catch { }
+        SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
     }
 }

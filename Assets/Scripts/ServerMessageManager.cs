@@ -73,8 +73,7 @@ public class ServerMessageManager : MonoBehaviour
     {
         ushort winningPlayer = message.GetUShort();
         Debug.Log($"GAME OVER - Player {winningPlayer} WON!");
-        FindObjectOfType<WordManager>().BecomeObserver();
-        //destroy everyone's data, go back to menu
+        FindObjectOfType<PlayerManager>().ShowWinningPlayer(winningPlayer);
     }
     #endregion
 }
