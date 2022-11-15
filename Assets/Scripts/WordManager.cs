@@ -107,7 +107,7 @@ public class WordManager : MonoBehaviour
             Transform letterTransf = transform.GetChild(currentGuess.Length);
             GUIGuessedWordManager letterControl = letterTransf.GetComponent<GUIGuessedWordManager>();
             letterControl.SetLetter(' ');
-            guiIndicatorManager.MoveIndicator(currentGuess.Length*1.25f);
+            //guiIndicatorManager.MoveIndicator(currentGuess.Length*1.25f);
         }
     }
 

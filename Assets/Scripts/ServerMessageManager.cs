@@ -65,8 +65,7 @@ public class ServerMessageManager : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.gameStart)]
     private static void GameStart(Message message)
     {
-        Debug.Log("AAAA");
-        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
+        FindObjectOfType<MainMenu>().onMatchStartClient();
     }
 
     [MessageHandler((ushort)ServerToClientId.gameOver)]

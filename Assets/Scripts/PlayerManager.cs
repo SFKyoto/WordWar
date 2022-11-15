@@ -3,7 +3,6 @@ using RiptideNetworking;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -13,6 +12,8 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
+        //Debug.Log("isInLobby hasValue agr: " + PlayerManager.isInLobby.HasValue);
+        //isInLobby = isInLobby.HasValue ? isInLobby : true;
         if(isInLobby && multiPlayerMode == "server"){
             PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
             SpawnPlayer(0, playerData); //0 é o servidor
@@ -40,7 +41,10 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayersData(Dictionary<ushort, PlayerData> playerListReceived)
     {
         playerList = playerListReceived;
-        FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
+        try { FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList); }
+        catch { }
+        try { FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(playerList); }
+        catch { }
     }
 
     public void ShowWinningPlayer(ushort winningPlayer)
@@ -95,7 +99,8 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
+            Debug.Log("added aa");
+            //NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
         }
     }
 
@@ -104,11 +109,8 @@ public class PlayerManager : MonoBehaviour
         string checkedAttempt = FindObjectOfType<MultiPlayerServerGuessesManager>().GetCheckedAttemptOfUser(attempt, playerList[fromClientId].palavraAtual);
         Debug.Log($"Tentativa da palavra {playerList[fromClientId].palavraAtual} do cliente {fromClientId} - {attempt} = {checkedAttempt}");
 
-        if (checkedAttempt == "X" || checkedAttempt.Contains((char)AttempededLetter.Missed) || checkedAttempt.Contains((char)AttempededLetter.NotInWord))
-        {
-            playerList[fromClientId].qtdTentativas++;
-        }
-        else
+        playerList[fromClientId].qtdTentativas++;
+        if (!(checkedAttempt == "X" || checkedAttempt.Contains((char)AttempededLetter.Missed) || checkedAttempt.Contains((char)AttempededLetter.NotInWord)))
         {
             Debug.Log($"Player {fromClientId} guessed right");
             playerList[fromClientId].score += Math.Max(0,  1100 - (playerList[fromClientId].qtdTentativas * 100));
@@ -150,7 +152,8 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
+            Debug.Log("added bb");
+            //NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
         }
     }
     #endregion

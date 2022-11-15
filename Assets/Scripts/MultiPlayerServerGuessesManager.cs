@@ -39,7 +39,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         }
         timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
-            timeBetweenGuessedWords = 10.0f;
+            timeBetweenGuessedWords = 40.0f;
         timeLeftBetweenWords = timeBetweenGuessedWords;
 
         Debug.Log("mandando msg " + (ushort)ServerToClientId.gameStart);
@@ -84,8 +84,9 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
                 if (activePlayers.Count() <= 1)
                 {
-                    Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                    NetworkServerManager.Singleton.Server.SendToAll(playerLostMessage);
+                    Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+                    gameOverMessage.AddUShort(0);
+                    NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
                     NetworkServerManager.Singleton.Server.Stop();
 
                     //para tela de vitória
@@ -101,7 +102,6 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.value = timeLeftBetweenWords / timeBetweenGuessedWords;
             Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
             playerStatsMsg.AddString(JsonConvert.SerializeObject(PlayerManager.playerList));
-            Debug.Log(NetworkServerManager.Singleton.Server);
             NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
             
             //para message() depois

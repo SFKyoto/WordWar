@@ -9,7 +9,7 @@ public class MultiPlayerGuessesManager : GameGuessesManager
     {
         timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
-            timeBetweenGuessedWords = 10.0f;
+            timeBetweenGuessedWords = 40.0f;
     }
     public void Update()
     {
@@ -34,10 +34,11 @@ public class MultiPlayerGuessesManager : GameGuessesManager
 
     public override string GetCheckedAttempt(string currentGuess)
     {
-        Debug.Log($"Multiplayer message: {currentGuess}");
+        Debug.Log($"Multiplayer message: {(ushort)ClientToServerId.wordGuess} - {currentGuess}");
 
         Message message = Message.Create(MessageSendMode.reliable, (ushort)ClientToServerId.wordGuess);
         message.AddString(currentGuess);
+        //FindObjectOfType<NetworkClientManager>().Client.Send(message);
         NetworkClientManager.Singleton.Client.Send(message);
 
         return "";

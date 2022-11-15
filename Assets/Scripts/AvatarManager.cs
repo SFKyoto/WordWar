@@ -170,7 +170,7 @@ public class AvatarManager : MonoBehaviour
 
     public void ClearAvatar()
     {
-        Debug.Log("clear avatar");
+        //Debug.Log("clear avatar");
         if (parts.Length > 0)
         {
             foreach(GameObject part in parts)

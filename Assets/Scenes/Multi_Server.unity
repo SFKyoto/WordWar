@@ -2090,8 +2090,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fe2064486f56d4ea63f0d757f78fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBetweenGuessedWords: 0
   answerOfTurn: 
   answerOfTurnNoAccents: 
+  timerStarted: 0
+  timeLeftBetweenWords: 0
 --- !u!1 &500407705
 GameObject:
   m_ObjectHideFlags: 0
@@ -4358,7 +4361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1082788598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6118,7 +6121,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1587697645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6525,8 +6528,6 @@ GameObject:
   - component: {fileID: 1635114006}
   - component: {fileID: 1635114010}
   - component: {fileID: 1635114008}
-  - component: {fileID: 1635114009}
-  - component: {fileID: 1635114011}
   m_Layer: 0
   m_Name: MultiPlayerServerGameMode
   m_TagString: Untagged
@@ -6584,20 +6585,6 @@ MonoBehaviour:
   TXTWinningPlayerNick: {fileID: 1559820819}
   TXTWinningPlayerScore: {fileID: 1490445974}
   WinningPlayerAvatar: {fileID: 1234749423}
---- !u!114 &1635114009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1635114004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06c3749ede578de4581bef813749ad31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 1237
-  maxClientCount: 4
 --- !u!114 &1635114010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6610,26 +6597,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb51e738d0b522d46be572851bce8a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBetweenGuessedWords: 0
   answerOfTurn: 
   answerOfTurnNoAccents: 
-  qtdPalavrasJogo: 0
-  palavrasDoJogo: []
-  timeBetweenGuessedWords: 0
   timerStarted: 0
   timeLeftBetweenWords: 0
+  qtdPalavrasJogo: 0
+  palavrasDoJogo: []
   barrierProgress: 0
---- !u!114 &1635114011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1635114004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17461da8e992af04c961f3d27875689b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1661588319
 GameObject:
   m_ObjectHideFlags: 0

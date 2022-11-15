@@ -5,12 +5,12 @@ using UnityEngine;
 
 public enum ServerToClientId : ushort
 {
-    wordAnswer = 2,
-    playerStats = 3,
-    serverQuitGame = 4,
-    youLost = 5,
-    gameStart = 6,
-    gameOver = 7,
+    wordAnswer = 3,
+    playerStats = 4,
+    serverQuitGame = 5,
+    youLost = 6,
+    gameStart = 7,
+    gameOver = 8,
 }
 
 public enum ClientToServerId : ushort
@@ -57,22 +57,27 @@ public class NetworkClientManager : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerManager.multiPlayerMode == "client")
+        Debug.Log("multiPlayerMode: " + PlayerManager.multiPlayerMode);
+        Debug.Log("isInLobby: " + PlayerManager.isInLobby);
+        if (PlayerManager.multiPlayerMode == "client" && PlayerManager.isInLobby)
         {
-            ip = PlayerPrefs.GetString("IPSelected");
-            Debug.Log("IP: " + ip);
-            port = 1237;
-            StartConn();
+            if (PlayerManager.isInLobby)
+            {
+                ip = PlayerPrefs.GetString("IPSelected");
+                Debug.Log("IP: " + ip);
+                port = 1237;
+                StartConn();
 
-            Message message = Message.Create(MessageSendMode.reliable, (ushort)ClientToServerId.playerDataMsg);
-            message.AddString(JsonUtility.ToJson(FindObjectOfType<AvatarManager>().GetPlayerData()));
-            try
-            {
-                Client.Send(message);
-            }
-            catch
-            {
-                FindObjectOfType<GUILobbyManager>().FailedToConnect();
+                Message message = Message.Create(MessageSendMode.reliable, (ushort)ClientToServerId.playerDataMsg);
+                message.AddString(JsonUtility.ToJson(FindObjectOfType<AvatarManager>().GetPlayerData()));
+                try
+                {
+                    Client.Send(message);
+                }
+                catch
+                {
+                    FindObjectOfType<GUILobbyManager>().FailedToConnect();
+                }
             }
         }
         else Destroy(this);

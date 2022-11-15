@@ -42,9 +42,9 @@ public class GUIMultiplayerManager : MonoBehaviour
     public void UpdatePlayers(Dictionary<ushort, PlayerData> playerList)
     {
         PlayerData[] players = playerList.Values.ToArray();
-        Debug.Log(players.Length);
-        Debug.Log(playerList[0]);
-        Debug.Log(players[0]);
+        //Debug.Log(players.Length);
+        //Debug.Log(playerList[0]);
+        //Debug.Log(players[0]);
 
         for (int i = 0; i < TXTPlayerNicks.Length; i++)
         {
@@ -60,6 +60,8 @@ public class GUIMultiplayerManager : MonoBehaviour
     /// </summary>
     public void ShowWinningPlayer(PlayerData playerData)
     {
+        FindObjectOfType<WordManager>().BecomeObserver();
+        FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false;
         guiWinningScreenControl.MenuToggle();
         TXTWinningPlayerNick.text = playerData.username;
         TXTWinningPlayerScore.text = playerData.score + " pts";
