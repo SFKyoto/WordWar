@@ -146,9 +146,9 @@ public class AvatarManager : MonoBehaviour
                 parts[bodyPart.bodyPartType].SetActive(true);
                 Image image = parts[bodyPart.bodyPartType].GetComponent<Image>();
                 Sprite sprite = Resources.Load<Sprite>("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
-                Debug.Log(sprite);
+                //Debug.Log(sprite);
                 image.sprite = sprite;
-                Debug.Log("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
+                //Debug.Log("Avatar/" + bodyPart.bodyPartType + "/" + bodyPart.bodyPartId);
                 image.color = new Color(bodyPart.bodyPartColor.r, bodyPart.bodyPartColor.g, bodyPart.bodyPartColor.b, bodyPart.bodyPartColor.a);
             }
         }

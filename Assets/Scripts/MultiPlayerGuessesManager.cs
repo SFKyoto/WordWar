@@ -5,6 +5,25 @@ using RiptideNetworking;
 
 public class MultiPlayerGuessesManager : GameGuessesManager
 {
+    public void Start()
+    {
+        timerStarted = true;
+        if (timeBetweenGuessedWords <= 0)
+            timeBetweenGuessedWords = 10.0f;
+    }
+    public void Update()
+    {
+        if (timerStarted)
+        {
+            timeLeftBetweenWords -= Time.deltaTime;
+            if (timeLeftBetweenWords <= 0)
+            {
+                timeLeftBetweenWords = timeBetweenGuessedWords;
+            }
+            FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.value = timeLeftBetweenWords / timeBetweenGuessedWords;
+        }
+    }
+
     //public NetworkClientManager networkClientManager;
     private void Awake()
     {

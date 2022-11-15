@@ -14,12 +14,12 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
     [Header("Game settings")]
     public ushort qtdPalavrasJogo;
     public List<string> palavrasDoJogo;
-    public float timeBetweenGuessedWords;
+    //public float timeBetweenGuessedWords;
 
     [Header("Round State")]
-    public Boolean timerStarted;
-    public float timeLeftBetweenWords;
-    public ushort barrierProgress;
+    //public bool timerStarted;
+    //public float timeLeftBetweenWords;
+    public ushort barrierProgress = 1;
 
     private void Start()
     {
@@ -42,9 +42,11 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             timeBetweenGuessedWords = 10.0f;
         timeLeftBetweenWords = timeBetweenGuessedWords;
 
-        NetworkServerManager.Singleton.Server.SendToAll(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameStart));
+        Debug.Log("mandando msg " + (ushort)ServerToClientId.gameStart);
+        Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameStart);
+        NetworkServerManager.Singleton.Server.SendToAll(message);
+        //FindObjectOfType<PlayerManager>().SendMessageToAll(message);
         FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(PlayerManager.playerList);
-        barrierProgress = 1;
     }
 
     void Update()
@@ -75,7 +77,6 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 else
                 {
                     FindObjectOfType<WordManager>().BecomeObserver();
-                    FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.enabled = false;
                 }
                 FindObjectOfType<PlayerManager>().RemovePlayerFromList(playerToDisconnect.Value.id);
 
@@ -136,7 +137,11 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             gameOverMessage.AddUShort(0);
             NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
             NetworkServerManager.Singleton.Server.Stop();
-            //go to result screen
+
+            //para tela de vitória
+            timerStarted = false;
+            FindObjectOfType<WordManager>().BecomeObserver();
+            FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(PlayerManager.playerList[0]);
         }
 
         return returnedAttempt;

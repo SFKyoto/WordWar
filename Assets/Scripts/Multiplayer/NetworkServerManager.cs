@@ -42,7 +42,7 @@ public class NetworkServerManager : MonoBehaviour
 
     private void Start()
     {
-        if(PlayerPrefs.GetString("multiPlayerMode") == "server")
+        if (PlayerManager.multiPlayerMode == "server")
         {
             Debug.Log("Starting server...");
             Application.targetFrameRate = 60;
@@ -54,7 +54,11 @@ public class NetworkServerManager : MonoBehaviour
             Server.ClientConnected += PlayerConnected;
             Server.ClientDisconnected += PlayerLeft;
         }
-        else Destroy(this);
+        else
+        {
+            Debug.Log("Está como cliente...");
+            Destroy(this);
+        }
     }
 
     private void FixedUpdate()

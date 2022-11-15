@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class GUILobbyManager : MonoBehaviour
 {
+    public GameObject GUILobby;
+    public TextMeshProUGUI TXTServerDataa;
     public TextMeshProUGUI TXTServerData;
     public TextMeshProUGUI[] TXTPlayerData = new TextMeshProUGUI[4];
     public AvatarManager[] Avatars;
@@ -17,7 +19,7 @@ public class GUILobbyManager : MonoBehaviour
 
     private void Start()
     {
-        isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
+        isMPlayerModeServer = PlayerManager.multiPlayerMode == "server";
         if (isMPlayerModeServer)
         {
             TXTServerData.text = "Código da sala:\n" + new WebClient().DownloadString("https://api.ipify.org/");
@@ -60,4 +62,8 @@ public class GUILobbyManager : MonoBehaviour
         }
     }
 
+    public void hideAll()
+    {
+        GUILobby.gameObject.SetActive(false);
+    }
 }

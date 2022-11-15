@@ -22,7 +22,7 @@ public class GUIMultiplayerManager : MonoBehaviour
 
     private void Start()
     {
-        isMPlayerModeServer = PlayerPrefs.GetString("multiPlayerMode") == "server";
+        isMPlayerModeServer = PlayerManager.multiPlayerMode == "server";
 
         for (int i = 0; i < TXTPlayerNicks.Length; i++)
             TXTPlayerNicks[i].text = TXTPlayerScores[i].text = "";

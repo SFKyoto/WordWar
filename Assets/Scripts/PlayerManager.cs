@@ -8,10 +8,12 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
     public static Dictionary<ushort, PlayerData> playerList = new Dictionary<ushort, PlayerData>();
+    public static string multiPlayerMode;
+    public static bool isInLobby = true;
 
     private void Start()
     {
-        if(SceneManager.GetActiveScene().name == "lobby" && PlayerPrefs.GetString("multiPlayerMode") == "server"){
+        if(isInLobby && multiPlayerMode == "server"){
             PlayerData playerData = FindObjectOfType<AvatarManager>().GetPlayerData();
             SpawnPlayer(0, playerData); //0 é o servidor
             FindObjectOfType<GUILobbyManager>()?.UpdatePlayers(playerList);
@@ -22,7 +24,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (playerList.ContainsKey(playerId))
         {
-            if(SceneManager.GetActiveScene().name == "lobby")
+            if(isInLobby)
             {
                 playerList.Remove(playerId);
                 FindObjectOfType<GUILobbyManager>().UpdatePlayers(playerList);
@@ -44,7 +46,10 @@ public class PlayerManager : MonoBehaviour
     public void ShowWinningPlayer(ushort winningPlayer)
     {
         FindObjectOfType<WordManager>().BecomeObserver();
-        FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false;
+        try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
+        catch { }
+        try { FindObjectOfType<MultiPlayerGuessesManager>().timerStarted = false; }
+        catch { }
         FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(playerList[winningPlayer]);
     }
 
@@ -64,6 +69,16 @@ public class PlayerManager : MonoBehaviour
                 if(otherPlayer.id != 0)
                     NetworkServerManager.Singleton.Server.Send(message, otherPlayer.id);
         }
+    }
+
+    public void SendMessageToAll(Message message)
+    {
+        Debug.Log(message.ToString());
+        Debug.Log(playerList.Count);
+        Debug.Log(NetworkServerManager.Singleton.Server);
+        foreach (PlayerData otherPlayer in playerList.Values)
+            if (otherPlayer.id != 0)
+                NetworkServerManager.Singleton.Server.Send(message, otherPlayer.id);
     }
 
     #region Messages
@@ -106,6 +121,7 @@ public class PlayerManager : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.wordGuess)]
     private static void GetGuessFromPlayer(ushort fromClientId, Message message)
     {
+        Debug.Log("getguessfromplayer, timeStarted: " + FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted);
         if (FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted)
         {
             if (playerList.ContainsKey(fromClientId) && playerList[fromClientId].active)

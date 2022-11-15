@@ -15,9 +15,14 @@ public abstract class GameGuessesManager : MonoBehaviour
     protected List<string> listAllowedGuesses = new List<string>();
     protected List<string> listAllowedGuessesNoAccents = new List<string>();
 
+    [Header("Game settings")]
+    public float timeBetweenGuessedWords;
+
     [Header("Round State")]
     public string answerOfTurn;
     public string answerOfTurnNoAccents;
+    public bool timerStarted;
+    public float timeLeftBetweenWords;
 
     /// <summary>
     /// Obtém as listas de tentativas e repostas possíveis de arquivos incluídos com o jogo.

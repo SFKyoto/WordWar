@@ -57,7 +57,7 @@ public class NetworkClientManager : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerPrefs.GetString("multiPlayerMode") == "client")
+        if (PlayerManager.multiPlayerMode == "client")
         {
             ip = PlayerPrefs.GetString("IPSelected");
             Debug.Log("IP: " + ip);

@@ -9,7 +9,13 @@ public class MainMenu : MonoBehaviour
 {
     public string IP;
     public GUIControl disconnectedPopup;
+    public TMP_InputField TMPIPTIp;
 
+    public void Start()
+    {
+        try { TMPIPTIp.text = PlayerPrefs.GetString("IPSelected"); }
+        catch { }
+    }
     public void onMainMenuPressed()
     {
         SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
@@ -56,23 +62,29 @@ public class MainMenu : MonoBehaviour
     public void onMultiplayerClientPressed()
     {
         PlayerPrefs.SetString("multiPlayerMode", "client");
+        PlayerManager.multiPlayerMode = "client";
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }
 
     public void onMultiplayerServerPressed()
     {
         PlayerPrefs.SetString("multiPlayerMode", "server");
+        PlayerManager.multiPlayerMode = "server";
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }
 
     public void onMatchStartClient()
     {
-        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Single);
+        FindObjectOfType<GUILobbyManager>().hideAll();
+        PlayerManager.isInLobby = false;
+        SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Additive);
     }
 
     public void onMatchStartServer()
     {
-        SceneManager.LoadScene("Assets/Scenes/Multi_Server.unity", LoadSceneMode.Single);
+        FindObjectOfType<GUILobbyManager>().hideAll();
+        PlayerManager.isInLobby = false;
+        SceneManager.LoadScene("Assets/Scenes/Multi_Server.unity", LoadSceneMode.Additive);
     }
 
     public void onDisconnected()
