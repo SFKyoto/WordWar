@@ -85,14 +85,14 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 if (activePlayers.Count() <= 1)
                 {
                     Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                    gameOverMessage.AddUShort(0);
+                    ushort winningPlayer = activePlayers.Count() <= 0 ? playerToDisconnect.Key : activePlayers.First().Key;
+                    gameOverMessage.AddUShort(winningPlayer);
                     NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
                     NetworkServerManager.Singleton.Server.Stop();
 
                     //para tela de vitória
                     timerStarted = false;
                     FindObjectOfType<WordManager>().BecomeObserver();
-                    ushort winningPlayer = activePlayers.Count() <= 0 ? playerToDisconnect.Key : activePlayers.First().Key;
                     FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
                 }
 

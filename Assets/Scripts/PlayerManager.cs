@@ -74,9 +74,6 @@ public class PlayerManager : MonoBehaviour
 
     public void SendMessageToAll(Message message)
     {
-        Debug.Log(message.ToString());
-        Debug.Log(playerList.Count);
-        Debug.Log(NetworkServerManager.Singleton.Server);
         foreach (PlayerData otherPlayer in playerList.Values)
             if (otherPlayer.id != 0)
                 NetworkServerManager.Singleton.Server.Send(message, otherPlayer.id);
@@ -96,8 +93,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("added aa");
-            //NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
+            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
         }
     }
 

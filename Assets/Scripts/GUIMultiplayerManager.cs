@@ -60,6 +60,7 @@ public class GUIMultiplayerManager : MonoBehaviour
     /// </summary>
     public void ShowWinningPlayer(ushort winningPlayer)
     {
+        Debug.Log("fim de jogo - winning player: " + winningPlayer);
         FindObjectOfType<WordManager>().BecomeObserver();
         try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
         catch { }
