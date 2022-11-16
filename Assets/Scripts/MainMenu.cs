@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -61,14 +58,15 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerClientPressed()
     {
-        PlayerPrefs.SetString("multiPlayerMode", "client");
-        PlayerManager.multiPlayerMode = "client";
-        SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
+        if(PlayerPrefs.GetString("IPSelected") != null && PlayerPrefs.GetString("IPSelected") != "")
+        {
+            PlayerManager.multiPlayerMode = "client";
+            SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
+        }
     }
 
     public void onMultiplayerServerPressed()
     {
-        PlayerPrefs.SetString("multiPlayerMode", "server");
         PlayerManager.multiPlayerMode = "server";
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }

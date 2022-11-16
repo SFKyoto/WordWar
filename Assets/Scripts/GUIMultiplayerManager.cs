@@ -58,13 +58,14 @@ public class GUIMultiplayerManager : MonoBehaviour
     /// <summary>
     /// Exibe o popup de jogador vencedor.
     /// </summary>
-    public void ShowWinningPlayer(PlayerData playerData)
+    public void ShowWinningPlayer(ushort winningPlayer)
     {
         FindObjectOfType<WordManager>().BecomeObserver();
-        FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false;
+        try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
+        catch { }
         guiWinningScreenControl.MenuToggle();
-        TXTWinningPlayerNick.text = playerData.username;
-        TXTWinningPlayerScore.text = playerData.score + " pts";
-        WinningPlayerAvatar.SetPlayerData(playerData);
+        TXTWinningPlayerNick.text = PlayerManager.playerList[winningPlayer].username;
+        TXTWinningPlayerScore.text = PlayerManager.playerList[winningPlayer].score + " pts";
+        WinningPlayerAvatar.SetPlayerData(PlayerManager.playerList[winningPlayer]);
     }
 }

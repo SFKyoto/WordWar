@@ -57,8 +57,6 @@ public class NetworkClientManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("multiPlayerMode: " + PlayerManager.multiPlayerMode);
-        Debug.Log("isInLobby: " + PlayerManager.isInLobby);
         if (PlayerManager.multiPlayerMode == "client" && PlayerManager.isInLobby)
         {
             if (PlayerManager.isInLobby)

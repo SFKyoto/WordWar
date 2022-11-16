@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class GUILobbyManager : MonoBehaviour
     public TextMeshProUGUI TXTServerData;
     public TextMeshProUGUI[] TXTPlayerData = new TextMeshProUGUI[4];
     public AvatarManager[] Avatars;
-    public Boolean isMPlayerModeServer;
+    public bool isMPlayerModeServer;
     public Button BTNStartMatch;
 
     private void Start()
@@ -22,7 +23,10 @@ public class GUILobbyManager : MonoBehaviour
         isMPlayerModeServer = PlayerManager.multiPlayerMode == "server";
         if (isMPlayerModeServer)
         {
-            TXTServerData.text = "Código da sala:\n" + new WebClient().DownloadString("https://api.ipify.org/");
+            //TXTServerData.text = "Código da sala:\n" + new WebClient().DownloadString("https://api.ipify.org/");
+            TXTServerData.text = "Código da sala:\n" + Array.Find(
+                Dns.GetHostEntry(string.Empty).AddressList,
+                a => a.AddressFamily == AddressFamily.InterNetwork);
         }
         else
         {
@@ -36,7 +40,7 @@ public class GUILobbyManager : MonoBehaviour
 
     public void DidDisconnect()
     {
-        TXTServerData.text = "Desconectado do servidor.";
+        TXTServerData.text = "Desconectado do servidor; já há uma partida em andamento?";
     }
     public void FailedToConnect()
     {
@@ -48,6 +52,7 @@ public class GUILobbyManager : MonoBehaviour
     /// </summary>
     public void UpdatePlayers(Dictionary<ushort, PlayerData> playerList)
     {
+        if (!isMPlayerModeServer) TXTServerData.text = "Código da sala:\n" + PlayerPrefs.GetString("IPSelected");
         PlayerData[] players = playerList.Values.ToArray();
         Debug.Log(players.Length);
         Debug.Log(playerList[0]);

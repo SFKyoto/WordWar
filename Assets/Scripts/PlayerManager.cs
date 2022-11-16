@@ -49,12 +49,9 @@ public class PlayerManager : MonoBehaviour
 
     public void ShowWinningPlayer(ushort winningPlayer)
     {
-        FindObjectOfType<WordManager>().BecomeObserver();
-        try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
-        catch { }
         try { FindObjectOfType<MultiPlayerGuessesManager>().timerStarted = false; }
         catch { }
-        FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(playerList[winningPlayer]);
+        FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
     }
 
     public static void SpawnPlayer(ushort id, PlayerData playerData)
@@ -146,14 +143,13 @@ public class PlayerManager : MonoBehaviour
                     //to winning screen
                     FindObjectOfType<WordManager>().BecomeObserver();
                     FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false;
-                    FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(playerList[fromClientId]);
+                    FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(fromClientId);
                 }
             }
         }
         else
         {
-            Debug.Log("added bb");
-            //NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
+            NetworkServerManager.Singleton.Server.DisconnectClient(fromClientId);
         }
     }
     #endregion

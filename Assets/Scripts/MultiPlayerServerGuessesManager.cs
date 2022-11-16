@@ -58,7 +58,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             //Debug.Log("time: " + timeLeftBetweenWords.ToString());
             if (timeLeftBetweenWords <= 0)
             {
-                barrierProgress++; //n necessario agora 
+                barrierProgress++;
 
                 var activePlayers = PlayerManager.playerList.Where(player => player.Value.active);
                 Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
@@ -92,7 +92,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                     //para tela de vitória
                     timerStarted = false;
                     FindObjectOfType<WordManager>().BecomeObserver();
-                    PlayerData winningPlayer = activePlayers.Count() <= 0 ? playerToDisconnect.Value : activePlayers.First().Value;
+                    ushort winningPlayer = activePlayers.Count() <= 0 ? playerToDisconnect.Key : activePlayers.First().Key;
                     FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
                 }
 
@@ -100,14 +100,16 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             }
 
             FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.value = timeLeftBetweenWords / timeBetweenGuessedWords;
-            Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
-            playerStatsMsg.AddString(JsonConvert.SerializeObject(PlayerManager.playerList));
-            NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
-            
-            //para message() depois
             FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(PlayerManager.playerList);
             FindObjectOfType<GUIMultiplayerManager>().TXTCurrentRound.text = "Rodada: " + barrierProgress.ToString();
         }
+    }
+
+    public void SendPlayersData()
+    {
+        Message playerStatsMsg = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerStats);
+        playerStatsMsg.AddString(JsonConvert.SerializeObject(PlayerManager.playerList));
+        NetworkServerManager.Singleton.Server.SendToAll(playerStatsMsg);
     }
 
     public override void GenerateNewAnswer()
@@ -129,6 +131,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
     public override string GetCheckedAttempt(string currentGuess)
     {
         string returnedAttempt = PlayerManager.GetGuessFromPlayer(0, currentGuess);
+        SendPlayersData();
 
         if (PlayerManager.playerList[0].palavraAtual >= qtdPalavrasJogo)
         {
@@ -139,9 +142,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             NetworkServerManager.Singleton.Server.Stop();
 
             //para tela de vitória
-            timerStarted = false;
-            FindObjectOfType<WordManager>().BecomeObserver();
-            FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(PlayerManager.playerList[0]);
+            FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(0);
         }
 
         return returnedAttempt;
