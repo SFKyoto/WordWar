@@ -7,7 +7,6 @@ public class MultiPlayerGuessesManager : GameGuessesManager
 {
     public void Start()
     {
-        timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
             timeBetweenGuessedWords = 40.0f;
     }

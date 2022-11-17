@@ -50,6 +50,8 @@ public class ServerMessageManager : MonoBehaviour
         string playersData = message.GetString();
         Debug.Log(playersData);
         FindObjectOfType<PlayerManager>().SetPlayersData(JsonConvert.DeserializeObject<Dictionary<ushort, PlayerData>> (playersData));
+        try { FindObjectOfType<MultiPlayerGuessesManager>().timerStarted = true; }
+        catch { }
     }
 
     [MessageHandler((ushort)ServerToClientId.youLost)]
@@ -57,9 +59,6 @@ public class ServerMessageManager : MonoBehaviour
     {
         Debug.Log("Barrier got you!");
         FindObjectOfType<WordManager>().BecomeObserver();
-
-        //ushort quittingPlayer = message.GetUShort();
-        //Debug.Log($"Player {quittingPlayer} left the game.");
     }
 
     [MessageHandler((ushort)ServerToClientId.gameStart)]
@@ -73,7 +72,7 @@ public class ServerMessageManager : MonoBehaviour
     {
         ushort winningPlayer = message.GetUShort();
         Debug.Log($"GAME OVER - Player {winningPlayer} WON!");
-        FindObjectOfType<PlayerManager>().ShowWinningPlayer(winningPlayer);
+        FindObjectOfType<PlayerManager>().SendWinningPlayer(winningPlayer);
     }
     #endregion
 }

@@ -54,9 +54,9 @@ public class GUILobbyManager : MonoBehaviour
     {
         if (!isMPlayerModeServer) TXTServerData.text = "Código da sala:\n" + PlayerPrefs.GetString("IPSelected");
         PlayerData[] players = playerList.Values.ToArray();
-        Debug.Log(players.Length);
-        Debug.Log(playerList[0]);
-        Debug.Log(players[0]);
+        //Debug.Log(players.Length);
+        //Debug.Log(playerList[0]);
+        //Debug.Log(players[0]);
 
         for (int i = 0; i < TXTPlayerData.Length; i++)
         {

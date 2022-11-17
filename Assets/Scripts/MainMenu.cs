@@ -25,11 +25,11 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerSelectionPressed()
     {
-        try
-        {
-            NetworkClientManager.Singleton.Client?.Disconnect();
-        }
-        catch { }
+        Debug.Log("menu:");
+        Debug.Log(NetworkClientManager.Singleton);
+        NetworkClientManager.Singleton?.Client?.Disconnect();
+        NetworkServerManager.Singleton?.Server?.Stop();
+        PlayerManager.playerList.Clear();
         SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
     }
     
@@ -67,6 +67,7 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerServerPressed()
     {
+        PlayerManager.isInLobby = true;
         PlayerManager.multiPlayerMode = "server";
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }

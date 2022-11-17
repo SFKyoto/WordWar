@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using RiptideNetworking;
-using System;
 using Newtonsoft.Json;
 using System.Linq;
-using UnityEngine.UIElements;
-using UnityEngine.UI;
 
 public class MultiPlayerServerGuessesManager : GameGuessesManager
 {
@@ -45,7 +42,6 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         Debug.Log("mandando msg " + (ushort)ServerToClientId.gameStart);
         Message message = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameStart);
         NetworkServerManager.Singleton.Server.SendToAll(message);
-        //FindObjectOfType<PlayerManager>().SendMessageToAll(message);
         FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(PlayerManager.playerList);
     }
 
@@ -82,19 +78,6 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
 
                 //atualmente não há como dar empate
                 Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
-                if (activePlayers.Count() <= 1)
-                {
-                    Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-                    ushort winningPlayer = activePlayers.Count() <= 0 ? playerToDisconnect.Key : activePlayers.First().Key;
-                    gameOverMessage.AddUShort(winningPlayer);
-                    NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
-                    NetworkServerManager.Singleton.Server.Stop();
-
-                    //para tela de vitória
-                    timerStarted = false;
-                    FindObjectOfType<WordManager>().BecomeObserver();
-                    FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
-                }
 
                 timeLeftBetweenWords = timeBetweenGuessedWords;
             }
@@ -102,6 +85,8 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.value = timeLeftBetweenWords / timeBetweenGuessedWords;
             FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(PlayerManager.playerList);
             FindObjectOfType<GUIMultiplayerManager>().TXTCurrentRound.text = "Rodada: " + barrierProgress.ToString();
+
+            SendPlayersData();
         }
     }
 
@@ -142,7 +127,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
             NetworkServerManager.Singleton.Server.Stop();
 
             //para tela de vitória
-            FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(0);
+            FindObjectOfType<PlayerManager>().SendWinningPlayer(0);
         }
 
         return returnedAttempt;

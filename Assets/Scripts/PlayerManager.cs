@@ -2,7 +2,9 @@ using Newtonsoft.Json;
 using RiptideNetworking;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -34,7 +36,27 @@ public class PlayerManager : MonoBehaviour
             {
                 playerList[playerId].active = false;
                 FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(playerList);
+                CheckRemainingPlayers();
             }
+        }
+    }
+
+    /// <summary>
+    /// Checa jogadores ativos restantes e encerra a partida caso não existam mais.
+    /// </summary>
+    public void CheckRemainingPlayers()
+    {
+        var activePlayers = playerList.Where(player => player.Value.active);
+        if (activePlayers.Count() <= 1)
+        {
+            Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
+            ushort winningPlayer = (ushort)(activePlayers.Count() <= 0 ? 404 : activePlayers.First().Key);
+            gameOverMessage.AddUShort(winningPlayer);
+            NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
+            NetworkServerManager.Singleton.Server.Stop();
+
+            //para tela de vitória
+            SendWinningPlayer(winningPlayer);
         }
     }
 
@@ -47,9 +69,14 @@ public class PlayerManager : MonoBehaviour
         catch { }
     }
 
-    public void ShowWinningPlayer(ushort winningPlayer)
+    public void SendWinningPlayer(ushort winningPlayer)
     {
         try { FindObjectOfType<MultiPlayerGuessesManager>().timerStarted = false; }
+        catch { }
+        if (winningPlayer == 404 && playerList.Count == 1) winningPlayer = 0; //o próprio servidor
+        Debug.Log("fim de jogo - winning player: " + winningPlayer);
+        FindObjectOfType<WordManager>().BecomeObserver();
+        try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
         catch { }
         FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
     }

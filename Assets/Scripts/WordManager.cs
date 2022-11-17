@@ -243,5 +243,6 @@ public class WordManager : MonoBehaviour
         isKeyboardLocked = true;
         guiKeyboardManager.HideKeyboard();
         FindObjectOfType<GUIMultiplayerManager>().SLDTempoRestante.enabled = false;
+        FindObjectOfType<GUIMultiplayerManager>().TXTObserverWarn.enabled = true;
     }
 }

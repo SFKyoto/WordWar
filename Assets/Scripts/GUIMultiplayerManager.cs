@@ -15,6 +15,7 @@ public class GUIMultiplayerManager : MonoBehaviour
     public TextMeshProUGUI TXTCurrentRound;
     public Boolean isMPlayerModeServer;
 
+    public TextMeshProUGUI TXTObserverWarn;
     public GUIControl guiWinningScreenControl;
     public TextMeshProUGUI TXTWinningPlayerNick;
     public TextMeshProUGUI TXTWinningPlayerScore;
@@ -60,10 +61,6 @@ public class GUIMultiplayerManager : MonoBehaviour
     /// </summary>
     public void ShowWinningPlayer(ushort winningPlayer)
     {
-        Debug.Log("fim de jogo - winning player: " + winningPlayer);
-        FindObjectOfType<WordManager>().BecomeObserver();
-        try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
-        catch { }
         guiWinningScreenControl.MenuToggle();
         TXTWinningPlayerNick.text = PlayerManager.playerList[winningPlayer].username;
         TXTWinningPlayerScore.text = PlayerManager.playerList[winningPlayer].score + " pts";
