@@ -20,6 +20,7 @@ public class GUIMultiplayerManager : MonoBehaviour
     public TextMeshProUGUI TXTWinningPlayerNick;
     public TextMeshProUGUI TXTWinningPlayerScore;
     public AvatarManager WinningPlayerAvatar;
+    public TextMeshProUGUI TXTTie;
 
     private void Start()
     {
@@ -62,8 +63,20 @@ public class GUIMultiplayerManager : MonoBehaviour
     public void ShowWinningPlayer(ushort winningPlayer)
     {
         guiWinningScreenControl.MenuToggle();
-        TXTWinningPlayerNick.text = PlayerManager.playerList[winningPlayer].username;
-        TXTWinningPlayerScore.text = PlayerManager.playerList[winningPlayer].score + " pts";
-        WinningPlayerAvatar.SetPlayerData(PlayerManager.playerList[winningPlayer]);
+        if(winningPlayer != PlayerManager.tiedMatch)
+        {
+            TXTWinningPlayerNick.text = PlayerManager.playerList[winningPlayer].username;
+            TXTWinningPlayerScore.text = PlayerManager.playerList[winningPlayer].score + " pts";
+            WinningPlayerAvatar.SetPlayerData(PlayerManager.playerList[winningPlayer]);
+        }
+        else
+        {
+            TXTTie.gameObject.SetActive(true);
+            int maiorPontuacao = PlayerManager.playerList.OrderByDescending(x => x.Value.score).First().Value.score;
+            TXTTie.text = $"Empate técnico!\nMaior pontuação: {maiorPontuacao}";
+            TXTWinningPlayerNick.gameObject.SetActive(false);
+            TXTWinningPlayerScore.gameObject.SetActive(false);
+            WinningPlayerAvatar.gameObject.SetActive(false);
+        }
     }
 }

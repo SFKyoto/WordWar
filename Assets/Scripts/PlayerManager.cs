@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     public static Dictionary<ushort, PlayerData> playerList = new Dictionary<ushort, PlayerData>();
     public static string multiPlayerMode;
     public static bool isInLobby = true;
+    public static readonly int tiedMatch = 404;
 
     private void Start()
     {
@@ -36,7 +37,6 @@ public class PlayerManager : MonoBehaviour
             {
                 playerList[playerId].active = false;
                 FindObjectOfType<GUIMultiplayerManager>().UpdatePlayers(playerList);
-                CheckRemainingPlayers();
             }
         }
     }
@@ -50,7 +50,7 @@ public class PlayerManager : MonoBehaviour
         if (activePlayers.Count() <= 1)
         {
             Message gameOverMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.gameOver);
-            ushort winningPlayer = (ushort)(activePlayers.Count() <= 0 ? 404 : activePlayers.First().Key);
+            ushort winningPlayer = (ushort)(activePlayers.Count() <= 0 ? tiedMatch : activePlayers.First().Key);
             gameOverMessage.AddUShort(winningPlayer);
             NetworkServerManager.Singleton.Server.SendToAll(gameOverMessage);
             NetworkServerManager.Singleton.Server.Stop();
@@ -73,7 +73,7 @@ public class PlayerManager : MonoBehaviour
     {
         try { FindObjectOfType<MultiPlayerGuessesManager>().timerStarted = false; }
         catch { }
-        if (winningPlayer == 404 && playerList.Count == 1) winningPlayer = 0; //o próprio servidor
+        if (winningPlayer == tiedMatch && playerList.Count == 1) winningPlayer = 0; //o próprio servidor
         Debug.Log("fim de jogo - winning player: " + winningPlayer);
         FindObjectOfType<WordManager>().BecomeObserver();
         try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }

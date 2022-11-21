@@ -58,26 +58,31 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
 
                 var activePlayers = PlayerManager.playerList.Where(player => player.Value.active);
                 Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
-                var playerToDisconnect = activePlayers
-                    .OrderBy(player => player.Value.score)
-                    .ThenByDescending(player => player.Value.palavraAtual)
-                    .ThenByDescending(player => player.Value.qtdTentativas)
-                    .First();
-                Debug.Log($"Should disconnect user {playerToDisconnect.Key}");
+                int maxScore = activePlayers.Max(x => x.Value.score);
+                var playersToDisconnect = activePlayers.Where(player => player.Value.score == maxScore);
+                int maxPalavraAtual = playersToDisconnect.Max(x => x.Value.palavraAtual);
+                playersToDisconnect = playersToDisconnect.Where(player => player.Value.palavraAtual == maxPalavraAtual);
+                int maxQtdTentativas = playersToDisconnect.Max(x => x.Value.qtdTentativas);
+                playersToDisconnect = playersToDisconnect.Where(player => player.Value.qtdTentativas == maxQtdTentativas);
 
-                if(playerToDisconnect.Value.id != 0)
+                playersToDisconnect.ToList().ForEach(playerToDisconnect =>
                 {
-                    Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
-                    NetworkServerManager.Singleton.Server.Send(playerLostMessage, playerToDisconnect.Value.id);
-                }
-                else
-                {
-                    FindObjectOfType<WordManager>().BecomeObserver();
-                }
-                FindObjectOfType<PlayerManager>().RemovePlayerFromList(playerToDisconnect.Value.id);
+                    Debug.Log($"Should disconnect user {playerToDisconnect.Key}");
 
-                //atualmente não há como dar empate
+                    if (playerToDisconnect.Value.id != 0)
+                    {
+                        Message playerLostMessage = Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.youLost);
+                        NetworkServerManager.Singleton.Server.Send(playerLostMessage, playerToDisconnect.Value.id);
+                    }
+                    else
+                    {
+                        FindObjectOfType<WordManager>().BecomeObserver();
+                    }
+                    FindObjectOfType<PlayerManager>().RemovePlayerFromList(playerToDisconnect.Value.id);
+                });
+
                 Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
+                FindObjectOfType<PlayerManager>().CheckRemainingPlayers();
 
                 timeLeftBetweenWords = timeBetweenGuessedWords;
             }
