@@ -44,15 +44,22 @@ public class GUIMultiplayerManager : MonoBehaviour
     public void UpdatePlayers(Dictionary<ushort, PlayerData> playerList)
     {
         PlayerData[] players = playerList.Values.ToArray();
-        //Debug.Log(players.Length);
-        //Debug.Log(playerList[0]);
-        //Debug.Log(players[0]);
 
         for (int i = 0; i < TXTPlayerNicks.Length; i++)
         {
             TXTPlayerNicks[i].text = players.Length <= i ? "" : (players[i].username);
             TXTPlayerScores[i].text = players.Length <= i ? "" : (players[i].score + " pts");
-            if (players.Length > i) Avatars[i].SetPlayerData(players[i]);
+            if (players.Length > i)
+            {
+                Avatars[i].SetPlayerData(players[i]);
+                if (!players[i].active)
+                {
+                    Color transparentColor = TXTPlayerNicks[i].color;
+                    transparentColor.a = 0.5f;
+                    TXTPlayerNicks[i].color = transparentColor;
+                    TXTPlayerScores[i].color = transparentColor;
+                }
+            }
             else Avatars[i].ClearAvatar();
         }
     }

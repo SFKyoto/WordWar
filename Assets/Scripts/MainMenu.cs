@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,13 +8,19 @@ public class MainMenu : MonoBehaviour
     public string IP;
     public GUIControl disconnectedPopup;
     public TMP_InputField TMPIPTIp;
+    public GUIControl guiWinningPlayer;
 
     public void Start()
     {
         try { TMPIPTIp.text = PlayerPrefs.GetString("IPSelected"); }
         catch { }
+        if (PlayerManager.isThereWinningPlayer)
+        {
+            guiWinningPlayer.showWinningPlayer();
+            PlayerManager.isThereWinningPlayer = false;
+        }
     }
-    public void onMainMenuPressed()
+    public static void onMainMenuPressed()
     {
         SceneManager.LoadScene("Assets/Scenes/MainMenu.unity", LoadSceneMode.Single);
     }
@@ -38,7 +45,7 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Assets/Scenes/AvatarMenu.unity", LoadSceneMode.Single);
     }
 
-    public void onAboutPressed()
+    public static void onAboutPressed()
     {
         SceneManager.LoadScene("Assets/Scenes/About.unity", LoadSceneMode.Single);
     }

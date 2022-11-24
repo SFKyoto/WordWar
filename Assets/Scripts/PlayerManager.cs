@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
     public static string multiPlayerMode;
     public static bool isInLobby = true;
     public static readonly int tiedMatch = 404;
+    public static bool isThereWinningPlayer;
+    public static ushort winningPlayer;
 
     private void Start()
     {
@@ -78,7 +80,10 @@ public class PlayerManager : MonoBehaviour
         FindObjectOfType<WordManager>().BecomeObserver();
         try { FindObjectOfType<MultiPlayerServerGuessesManager>().timerStarted = false; }
         catch { }
-        FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
+        PlayerManager.winningPlayer = winningPlayer;
+        PlayerManager.isThereWinningPlayer = true;
+        MainMenu.onMainMenuPressed();
+        //FindObjectOfType<GUIMultiplayerManager>().ShowWinningPlayer(winningPlayer);
     }
 
     public static void SpawnPlayer(ushort id, PlayerData playerData)

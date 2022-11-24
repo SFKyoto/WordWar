@@ -22,7 +22,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
     {
         Debug.Log("multiplayer server manager started.");
         if (listPossibleAnswers.Count == 0) GetWordLists();
-        if (qtdPalavrasJogo <= 0) qtdPalavrasJogo = 2;
+        if (qtdPalavrasJogo <= 0) qtdPalavrasJogo = 20;
         for(int i = 0; i < qtdPalavrasJogo; i++)
         {
             string answer = GetRandomAnswerFromList();
@@ -36,7 +36,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         }
         timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
-            timeBetweenGuessedWords = 40.0f;
+            timeBetweenGuessedWords = 70.0f;
         timeLeftBetweenWords = timeBetweenGuessedWords;
 
         Debug.Log("mandando msg " + (ushort)ServerToClientId.gameStart);
@@ -57,13 +57,12 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 barrierProgress++;
 
                 var activePlayers = PlayerManager.playerList.Where(player => player.Value.active);
-                Debug.Log("tamanho do activePlayers: " + activePlayers.Count());
-                int maxScore = activePlayers.Max(x => x.Value.score);
-                var playersToDisconnect = activePlayers.Where(player => player.Value.score == maxScore);
-                int maxPalavraAtual = playersToDisconnect.Max(x => x.Value.palavraAtual);
-                playersToDisconnect = playersToDisconnect.Where(player => player.Value.palavraAtual == maxPalavraAtual);
-                int maxQtdTentativas = playersToDisconnect.Max(x => x.Value.qtdTentativas);
-                playersToDisconnect = playersToDisconnect.Where(player => player.Value.qtdTentativas == maxQtdTentativas);
+                int minScore = activePlayers.Min(x => x.Value.score);
+                var minScorePlayers = activePlayers.Where(player => player.Value.score == minScore);
+                int minPalavraAtual = minScorePlayers.Min(x => x.Value.palavraAtual);
+                var minWordPlayers = minScorePlayers.Where(player => player.Value.palavraAtual == minPalavraAtual);
+                int maxQtdTentativas = minWordPlayers.Max(x => x.Value.qtdTentativas);
+                var playersToDisconnect = minWordPlayers.Where(player => player.Value.qtdTentativas == maxQtdTentativas);
 
                 playersToDisconnect.ToList().ForEach(playerToDisconnect =>
                 {

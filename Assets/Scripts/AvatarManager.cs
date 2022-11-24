@@ -80,6 +80,7 @@ public class AvatarManager : MonoBehaviour
     //ordem corpo, olho, boca, cabelo
     public GameObject[] parts;
     public Image IMGActiveCross;
+    public Image IMGBLock;
 
     void Start()
     {
@@ -153,7 +154,8 @@ public class AvatarManager : MonoBehaviour
                 image.color = new Color(bodyPart.bodyPartColor.r, bodyPart.bodyPartColor.g, bodyPart.bodyPartColor.b, bodyPart.bodyPartColor.a);
             }
         }
-        IMGActiveCross?.gameObject.SetActive(!playerData.active);
+        //IMGActiveCross?.gameObject.SetActive(!playerData.active);
+        IMGBLock?.gameObject.SetActive(!playerData.active);
     }
 
     public void SetBodyPart(int bodyPartArray)
