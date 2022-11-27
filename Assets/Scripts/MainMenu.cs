@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public GUIControl disconnectedPopup;
     public TMP_InputField TMPIPTIp;
     public GUIControl guiWinningPlayer;
+    public TextMeshProUGUI TXTInvalidCode;
 
     public void Start()
     {
@@ -65,10 +66,14 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerClientPressed()
     {
-        if(PlayerPrefs.GetString("IPSelected") != null && PlayerPrefs.GetString("IPSelected") != "")
+        if(PlayerPrefs.GetString("IPSelected") != null && PlayerPrefs.GetString("IPSelected") != "" && PlayerPrefs.GetString("IPSelected").Length == 8)
         {
             PlayerManager.multiPlayerMode = "client";
             SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
+        }
+        else
+        {
+            TXTInvalidCode.gameObject.SetActive(true);
         }
     }
 

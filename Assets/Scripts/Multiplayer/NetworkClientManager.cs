@@ -61,7 +61,7 @@ public class NetworkClientManager : MonoBehaviour
         {
             if (PlayerManager.isInLobby)
             {
-                ip = PlayerPrefs.GetString("IPSelected");
+                ip = IPEncoder.DecodeFromBase36(PlayerPrefs.GetString("IPSelected"));
                 Debug.Log("IP: " + ip);
                 port = 1237;
                 StartConn();

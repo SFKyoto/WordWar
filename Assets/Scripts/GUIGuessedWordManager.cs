@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GUIGuessedWordManager : MonoBehaviour
 {
-    public ParticleSystem particleSystem;
+    //public ParticleSystem particleSystem;
     public Text letter;
     private Color bgColor;
     public bool isCorrect = false;
@@ -18,7 +16,7 @@ public class GUIGuessedWordManager : MonoBehaviour
 
     public void Correct()
     {
-        if(!isCorrect) particleSystem.Play();
+        //if(!isCorrect) particleSystem.Play();
         isCorrect = true;
     }
 

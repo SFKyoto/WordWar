@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -24,9 +23,9 @@ public class GUILobbyManager : MonoBehaviour
         if (isMPlayerModeServer)
         {
             //TXTServerData.text = "Código da sala:\n" + new WebClient().DownloadString("https://api.ipify.org/");
-            TXTServerData.text = "Código da sala:\n" + Array.Find(
+            TXTServerData.text = "Código da sala:\n" + IPEncoder.EncodeToBase36(Array.Find(
                 Dns.GetHostEntry(string.Empty).AddressList,
-                a => a.AddressFamily == AddressFamily.InterNetwork);
+                a => a.AddressFamily == AddressFamily.InterNetwork).ToString());
         }
         else
         {
