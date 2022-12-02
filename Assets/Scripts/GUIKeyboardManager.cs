@@ -24,7 +24,7 @@ public class GUIKeyboardManager : MonoBehaviour
             {
                 GUIGuessedWordManager letraTeclado = child.GetComponent<GUIGuessedWordManager>();
                 Color letterColor = letraTeclado.GetColor();
-                if(letterColor != correctColor || (letterColor == missColor && entry[index] == correctColor))
+                if((letterColor != correctColor || (letterColor == missColor && entry[index] == correctColor)) && !(letterColor == correctColor || letterColor == missColor && entry[index] == incorrectColor))
                 {
                     letraTeclado.SetBgColor(entry[index]);
                     letraTeclado.SetFontColor(fontOnWhiteColor);

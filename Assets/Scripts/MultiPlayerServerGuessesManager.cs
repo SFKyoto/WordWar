@@ -36,7 +36,7 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
         }
         timerStarted = true;
         if (timeBetweenGuessedWords <= 0)
-            timeBetweenGuessedWords = 70.0f;
+            timeBetweenGuessedWords = 80.0f;
         timeLeftBetweenWords = timeBetweenGuessedWords;
 
         Debug.Log("mandando msg " + (ushort)ServerToClientId.gameStart);
