@@ -68,6 +68,7 @@ public class MainMenu : MonoBehaviour
     {
         if(PlayerPrefs.GetString("IPSelected") != null && PlayerPrefs.GetString("IPSelected") != "" && PlayerPrefs.GetString("IPSelected").Length == 8)
         {
+            PlayerManager.isInLobby = true;
             PlayerManager.multiPlayerMode = "client";
             SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
         }
