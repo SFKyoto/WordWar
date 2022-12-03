@@ -5,22 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class GUIControl : MonoBehaviour
 {
+    public GameObject GUICanvas;
     bool isOpen = false;
     public TextMeshProUGUI TXTWinningPlayerNick;
     public TextMeshProUGUI TXTWinningPlayerScore;
     public AvatarManager WinningPlayerAvatar;
     public TextMeshProUGUI TXTTie;
+    public GameObject GUIHelpPopup;
 
     public void MenuToggle()
     {
         isOpen = !isOpen;
-        gameObject.SetActive(isOpen);
+        if(GUICanvas == null) gameObject.SetActive(isOpen);
+        else GUICanvas.SetActive(isOpen);
     }
 
     public void onContinue()
     {
         isOpen = false;
-        gameObject.SetActive(false);
+        if (GUICanvas == null) gameObject.SetActive(isOpen);
+        else GUICanvas.SetActive(isOpen);
     }
 
     public void onQuit()
@@ -57,5 +61,10 @@ public class GUIControl : MonoBehaviour
             TXTWinningPlayerScore.gameObject.SetActive(false);
             WinningPlayerAvatar.gameObject.SetActive(false);
         }
+    }
+
+    public void onGUIHelpPopupToggle()
+    {
+        GUIHelpPopup.gameObject.SetActive(!GUIHelpPopup.gameObject.activeSelf);
     }
 }

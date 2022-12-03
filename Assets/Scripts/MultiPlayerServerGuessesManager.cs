@@ -59,10 +59,11 @@ public class MultiPlayerServerGuessesManager : GameGuessesManager
                 var activePlayers = PlayerManager.playerList.Where(player => player.Value.active);
                 int minScore = activePlayers.Min(x => x.Value.score);
                 var minScorePlayers = activePlayers.Where(player => player.Value.score == minScore);
-                int minPalavraAtual = minScorePlayers.Min(x => x.Value.palavraAtual);
-                var minWordPlayers = minScorePlayers.Where(player => player.Value.palavraAtual == minPalavraAtual);
-                int maxQtdTentativas = minWordPlayers.Max(x => x.Value.qtdTentativas);
-                var playersToDisconnect = minWordPlayers.Where(player => player.Value.qtdTentativas == maxQtdTentativas);
+                //int minPalavraAtual = minScorePlayers.Min(x => x.Value.palavraAtual);
+                //var minWordPlayers = minScorePlayers.Where(player => player.Value.palavraAtual == minPalavraAtual);
+                //int maxQtdTentativas = minWordPlayers.Max(x => x.Value.qtdTentativas);
+                //var playersToDisconnect = minWordPlayers.Where(player => player.Value.qtdTentativas == maxQtdTentativas);
+                var playersToDisconnect = minScorePlayers;
 
                 playersToDisconnect.ToList().ForEach(playerToDisconnect =>
                 {

@@ -1,14 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class WordManager : MonoBehaviour
 {
     public AnswerManager guiAnswerManager;
-    public GUIIndicatorManager guiIndicatorManager;
+    //public GUIIndicatorManager guiIndicatorManager;
     public GameGuessesManager wordsManager;
     public GUIKeyboardManager guiKeyboardManager;
     public GUIControl guiOptionsControl;
