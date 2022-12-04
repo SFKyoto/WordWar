@@ -125,7 +125,7 @@ public abstract class GameGuessesManager : MonoBehaviour
         {
             if (currentGuessNoAccents[i] != answerOfTurnNoAccents[i])
             {
-                int indexLetraQuase = answerCopy.IndexOf(currentGuessNoAccents[i]);
+                int indexLetraQuase = SinglePlayerTextManipulation.RemoveAccents(answerCopy).IndexOf(currentGuessNoAccents[i]);
                 if (indexLetraQuase != -1)
                 {
                     returnedAnswer[i] = (char)AttempededLetter.Missed;
