@@ -11,22 +11,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/About.unity
     guid: dace0088d14ea934cb680cfa2ca86452
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AvatarMenu.unity
     guid: f8928f3c2ba0d09469eb6682f6960c55
   - enabled: 1
     path: Assets/Scenes/SinglePlayer.unity
     guid: 105682364fca3a745b0b808b62f6f1a4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multiplayer_Select.unity
     guid: ceac95013d1993b47b20cec40a2ea01f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/lobby.unity
     guid: ca96e9675f651b94081bb3a8d9ee2574
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multi_Client.unity
     guid: 6f3a1c39d44bb8c4fbc3c77a3b48ed79
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multi_Server.unity
     guid: f12261de2a8c2e54e9d87ea665a5c279
   m_configObjects: {}

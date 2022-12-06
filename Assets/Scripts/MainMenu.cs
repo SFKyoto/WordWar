@@ -13,13 +13,13 @@ public class MainMenu : MonoBehaviour
 
     public void Start()
     {
-        try { TMPIPTIp.text = PlayerPrefs.GetString("IPSelected"); }
-        catch { }
-        if (PlayerManager.isThereWinningPlayer)
-        {
-            guiWinningPlayer.showWinningPlayer();
-            PlayerManager.isThereWinningPlayer = false;
-        }
+        //try { TMPIPTIp.text = PlayerPrefs.GetString("IPSelected"); }
+        //catch { }
+        //if (PlayerManager.isThereWinningPlayer)
+        //{
+        //    guiWinningPlayer.showWinningPlayer();
+        //    PlayerManager.isThereWinningPlayer = false;
+        //}
     }
     public static void onMainMenuPressed()
     {
@@ -34,10 +34,10 @@ public class MainMenu : MonoBehaviour
     public void onMultiplayerSelectionPressed()
     {
         Debug.Log("menu:");
-        Debug.Log(NetworkClientManager.Singleton);
-        NetworkClientManager.Singleton?.Client?.Disconnect();
-        NetworkServerManager.Singleton?.Server?.Stop();
-        PlayerManager.playerList.Clear();
+        //Debug.Log(NetworkClientManager.Singleton);
+        //NetworkClientManager.Singleton?.Client?.Disconnect();
+        //NetworkServerManager.Singleton?.Server?.Stop();
+        //PlayerManager.playerList.Clear();
         SceneManager.LoadScene("Assets/Scenes/Multiplayer_Select.unity", LoadSceneMode.Single);
     }
     
@@ -68,8 +68,8 @@ public class MainMenu : MonoBehaviour
     {
         if(PlayerPrefs.GetString("IPSelected") != null && PlayerPrefs.GetString("IPSelected") != "" && PlayerPrefs.GetString("IPSelected").Length == 8)
         {
-            PlayerManager.isInLobby = true;
-            PlayerManager.multiPlayerMode = "client";
+            //PlayerManager.isInLobby = true;
+            //PlayerManager.multiPlayerMode = "client";
             SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
         }
         else
@@ -80,22 +80,22 @@ public class MainMenu : MonoBehaviour
 
     public void onMultiplayerServerPressed()
     {
-        PlayerManager.isInLobby = true;
-        PlayerManager.multiPlayerMode = "server";
+        //PlayerManager.isInLobby = true;
+        //PlayerManager.multiPlayerMode = "server";
         SceneManager.LoadScene("Assets/Scenes/lobby.unity", LoadSceneMode.Single);
     }
 
     public void onMatchStartClient()
     {
-        FindObjectOfType<GUILobbyManager>().hideAll();
-        PlayerManager.isInLobby = false;
+        //FindObjectOfType<GUILobbyManager>().hideAll();
+        //PlayerManager.isInLobby = false;
         SceneManager.LoadScene("Assets/Scenes/Multi_Client.unity", LoadSceneMode.Additive);
     }
 
     public void onMatchStartServer()
     {
-        FindObjectOfType<GUILobbyManager>().hideAll();
-        PlayerManager.isInLobby = false;
+        //FindObjectOfType<GUILobbyManager>().hideAll();
+        //PlayerManager.isInLobby = false;
         SceneManager.LoadScene("Assets/Scenes/Multi_Server.unity", LoadSceneMode.Additive);
     }
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public enum AttempededLetter
@@ -29,8 +29,10 @@ public abstract class GameGuessesManager : MonoBehaviour
     /// </summary>
     protected void GetWordLists()
     {
-        listPossibleAnswers = ReadTextFile(Application.dataPath + "/StreamingAssets/words_answers.txt");
-        listAllowedGuesses = ReadTextFile(Application.dataPath + "/StreamingAssets/words_broader.txt");
+        //listPossibleAnswers = ReadTextFile(Application.dataPath + "/StreamingAssets/words_answers.txt");
+        //listAllowedGuesses = ReadTextFile(Application.dataPath + "/StreamingAssets/words_broader.txt");
+        listPossibleAnswers = ReadTextFile("words_answers");
+        listAllowedGuesses = ReadTextFile("words_broader");
         listAllowedGuesses.ForEach((word) => listAllowedGuessesNoAccents.Add(SinglePlayerTextManipulation.RemoveAccents(word).ToLower()));
     }
 
@@ -50,17 +52,19 @@ public abstract class GameGuessesManager : MonoBehaviour
     /// </summary>
     private List<string> ReadTextFile(string file_path)
     {
-        List<string> wordsFromFile = new List<string>();
-        StreamReader inp_stm = new StreamReader(file_path);
+        //Debug.Log(file_path);
+        //List<string> wordsFromFile = new List<string>();
+        string[] wordsFromFile = Resources.Load<TextAsset>(file_path).text.Split("\r\n");
+        //StreamReader inp_stm = new StreamReader(file_path);
 
-        while (!inp_stm.EndOfStream)
-        {
-            string inp_ln = inp_stm.ReadLine();
-            wordsFromFile.Add(inp_ln.ToLower());
-        }
-        inp_stm.Close();
+        //while (!inp_stm.EndOfStream)
+        //{
+        //    string inp_ln = inp_stm.ReadLine();
+        //    wordsFromFile.Add(inp_ln.ToLower());
+        //}
+        //inp_stm.Close();
 
-        return wordsFromFile;
+        return wordsFromFile.ToList();
     }
 
     /// <summary>
@@ -84,7 +88,7 @@ public abstract class GameGuessesManager : MonoBehaviour
     protected string CompareWordWithGuess(string currentGuess, string wordOfRound)
     {
         //Debug.Log($"answerOfTurnNoAccents é null = {answerOfTurnNoAccents}");
-        Debug.Log($"answerOfTurnNoAccents: {answerOfTurnNoAccents}");
+        //Debug.Log($"answerOfTurnNoAccents: {answerOfTurnNoAccents}");
         //if (answerOfTurnNoAccents == "" || answerOfTurnNoAccents == null) GenerateNewAnswer();
 
         if (!IsInGuessList(currentGuess))
@@ -100,8 +104,8 @@ public abstract class GameGuessesManager : MonoBehaviour
         bool allCorrect = true;
 
         //primeiro checamos quais letras são corretas
-        Debug.Log(currentGuessNoAccents);
-        Debug.Log(answerCopy);
+        //Debug.Log(currentGuessNoAccents);
+        //Debug.Log(answerCopy);
         for (int i = 0; i < currentGuessNoAccents.Length; i++)
         {
             allCorrect = allCorrect && (currentGuessNoAccents[i] == answerOfTurnNoAccents[i]);
