@@ -1,4 +1,3 @@
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -60,7 +59,7 @@ public class MainMenu : MonoBehaviour
     public void onServerIPChanged(string IP)
     {
         //this.IP = IP;
-        PlayerPrefs.SetString("IPSelected", IP);
+        PlayerPrefs.SetString("IPSelected", IP.ToUpper());
         //this.IP = IP.Replace(".", "");
     }
 
